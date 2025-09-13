@@ -27,6 +27,9 @@ public class Todo {
     public Week getWeek() { return week; }
     public void setWeek(Week week) { this.week = week; };
 
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; };
+
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; };
 
