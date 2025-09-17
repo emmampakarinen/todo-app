@@ -20,8 +20,10 @@ services:
       retries: 10
 
   backend:
-    build: ../server
     container_name: todo-backend
+    build:
+      context: ../server # <-- folder that contains the backend Dockerfile & pom.xml
+      dockerfile: Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/todo_db
       SPRING_DATASOURCE_USERNAME: ${PG_USER}
@@ -34,12 +36,14 @@ services:
       - "8080:8080"
 
   frontend:
-    build: ../client/app
+    build:
+      context: ../client # <-- if your package.json is in ../client
+      dockerfile: Dockerfile
     container_name: todo-frontend
-    depends_on:
-      - backend
     ports:
       - "5173:80"
+    depends_on:
+      - backend
 
   pgadmin:
     image: dpage/pgadmin4:8
