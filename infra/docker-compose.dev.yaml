@@ -1,0 +1,85 @@
+# for development/hot reload
+services:
+  db:
+    image: postgres:16
+    container_name: todo-postgres
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DB}
+      TZ: "Europe/Helsinki"
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    container_name: todo-backend
+    image: maven:3.9.9-eclipse-temurin-21
+    working_dir: /app
+    # Mounting source so edits trigger restart (via DevTools) + cache the Maven repo
+    volumes:
+      - ../server:/app
+      - m2_cache:/root/.m2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${PG_DB}
+      SPRING_DATASOURCE_USERNAME: ${PG_USER}
+      SPRING_DATASOURCE_PASSWORD: ${PG_PASSWORD}
+      APP_CORS_ORIGINS: "http://localhost:5173,http://frontend"
+      JAVA_TOOL_OPTIONS: >
+        -Dspring.devtools.restart.poll-interval=2s
+        -Dspring.devtools.restart.quiet-period=1s
+    command: bash -lc "./mvnw -q spring-boot:run -Dspring-boot.run.fork=false"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  frontend:
+    container_name: todo-frontend
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ../client:/app
+      # keeping node_modules in the container so host bind doesn't wipe it
+      - client_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      # More reliable file-watching on Windows/WSL/Docker Desktop
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      VITE_PORT: "5173"
+    # Dev server with HMR; --host exposes it to the host browser
+    command: bash -lc "npm ci && npm run dev -- --host --port 5173"
+    depends_on:
+      - backend
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: todo-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True"
+      PGADMIN_LISTEN_PORT: "80"
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - pgadmindata:/var/lib/pgadmin
+
+volumes:
+  dbdata:
+  pgadmindata:
+  m2_cache:
+  client_node_modules:

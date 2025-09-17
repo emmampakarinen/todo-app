@@ -7,15 +7,15 @@ export default function App() {
   const [weeks, setWeeks] = useState<Week[]>([]);
 
   useEffect(() => {
-    api.get("/weeks").then(r => setWeeks(r.data));
+    api.get("/weeks").then((r) => setWeeks(r.data));
   }, []);
 
   const create = async () => {
     const monday = new Date();
     const day = monday.getDay(); // 0..6
-    const diff = (day === 0 ? -6 : 1 - day); // to Monday
+    const diff = day === 0 ? -6 : 1 - day; // to Monday
     monday.setDate(monday.getDate() + diff);
-    const iso = monday.toISOString().slice(0,10);
+    const iso = monday.toISOString().slice(0, 10);
     await api.post("/weeks", { weekStart: iso });
     const { data } = await api.get("/weeks");
     setWeeks(data);
@@ -26,7 +26,9 @@ export default function App() {
       <h1>Weeks</h1>
       <button onClick={create}>Create current week</button>
       <ul>
-        {weeks.map(w => <li key={w.id}>{w.weekStart}</li>)}
+        {weeks.map((w) => (
+          <li key={w.id}>{w.weekStart}</li>
+        ))}
       </ul>
     </div>
   );
