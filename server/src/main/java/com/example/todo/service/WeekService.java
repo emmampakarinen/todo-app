@@ -45,6 +45,18 @@ public class WeekService {
         return todos.findByWeekIdOrderByPositionAsc(weekId);
     } 
 
+    // create a new to do for the current week
+    @Transactional
+    public Todo addTodo(Long weekId, String title) {
+        var week = weeks.findById(weekId).orElseThrow();
+
+        var t = new Todo();
+        t.setWeek(week);
+        t.setTitle(title);
+        
+        return t; 
+    } 
+
     // todo is either done or not done, which can be changed
     @Transactional
     public Todo toggleDone(Long todoId, boolean done) {

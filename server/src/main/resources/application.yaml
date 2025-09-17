@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5050/todo_db
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
+    url: jdbc:postgresql://localhost:${PG_PORT:5433}/${PG_DB:todo_db}
+    username: ${PG_USER:todo_user}
+    password: ${PG_PASSWORD:todo_pass}
   jpa:
     hibernate:
       ddl-auto: update 
