@@ -1,35 +1,34 @@
-import { useEffect, useState } from "react";
-import { api } from "../lib/api";
-
-type Week = { id: number; weekStart: string };
+import { NavLink, Outlet } from "react-router-dom";
 
 export default function App() {
-  const [weeks, setWeeks] = useState<Week[]>([]);
-
-  useEffect(() => {
-    api.get("/weeks").then((r) => setWeeks(r.data));
-  }, []);
-
-  const create = async () => {
-    const monday = new Date();
-    const day = monday.getDay(); // 0..6
-    const diff = day === 0 ? -6 : 1 - day; // to Monday
-    monday.setDate(monday.getDate() + diff);
-    const iso = monday.toISOString().slice(0, 10);
-    await api.post("/weeks", { weekStart: iso });
-    const { data } = await api.get("/weeks");
-    setWeeks(data);
-  };
-
   return (
-    <div style={{ padding: 24 }}>
-      <h1>Weeks</h1>
-      <button onClick={create}>Create current week</button>
-      <ul>
-        {weeks.map((w) => (
-          <li key={w.id}>{w.weekStart}</li>
-        ))}
-      </ul>
+    <div className="min-h-screen flex flex-col">
+      <header className="border-b px-4 py-3">
+        <nav className="flex gap-4">
+          <NavLink
+            to="/home"
+            className={({ isActive }) => (isActive ? "font-semibold" : "")}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/login"
+            className={({ isActive }) => (isActive ? "font-semibold" : "")}
+          >
+            Login
+          </NavLink>
+          <NavLink
+            to="/register"
+            className={({ isActive }) => (isActive ? "font-semibold" : "")}
+          >
+            Register
+          </NavLink>
+        </nav>
+      </header>
+
+      <main className="flex-1 p-4">
+        <Outlet />
+      </main>
     </div>
   );
 }
