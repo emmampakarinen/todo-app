@@ -3,30 +3,16 @@ import { NavLink, Outlet } from "react-router-dom";
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="border-b px-4 py-3">
+      <header className=" border-b p-4 flex justify-between items-center">
+        <h1 className="font-bold text-lg">CheckIt</h1>
         <nav className="flex gap-4">
-          <NavLink
-            to="/home"
-            className={({ isActive }) => (isActive ? "font-semibold" : "")}
-          >
+          <NavLink to="/" className="hover:underline">
             Home
-          </NavLink>
-          <NavLink
-            to="/login"
-            className={({ isActive }) => (isActive ? "font-semibold" : "")}
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/register"
-            className={({ isActive }) => (isActive ? "font-semibold" : "")}
-          >
-            Register
           </NavLink>
         </nav>
       </header>
 
-      <main className="flex-1 p-4">
+      <main className="flex flex-col flex-1">
         <Outlet />
       </main>
     </div>
