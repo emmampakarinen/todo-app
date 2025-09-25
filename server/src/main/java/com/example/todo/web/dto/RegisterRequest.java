@@ -1,7 +1,13 @@
 package com.example.todo.web.dto;
 
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class RegisterRequest {
-    @email @NotBlank 
+    @Email @NotBlank 
     private String email; 
 
     @NotBlank @Size(min = 3, max = 32)
