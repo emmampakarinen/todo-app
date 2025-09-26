@@ -21,26 +21,28 @@ services:
 
   backend:
     container_name: todo-backend
-    image: maven:3.9.9-eclipse-temurin-21
-    working_dir: /app
-    # Mounting source so edits trigger restart (via DevTools) + cache the Maven repo
+    build:
+      context: ../server
+      dockerfile: Dockerfile.dev
     volumes:
       - ../server:/app
       - m2_cache:/root/.m2
+    entrypoint: ["bash", "-lc", 'chmod +x ./mvnw && exec "$0" "$@"', "bash"]
+    command:
+      - ./mvnw
+      - -q
+      - spring-boot:run
+      - -Dspring-boot.run.fork=true
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${PG_DB}
       SPRING_DATASOURCE_USERNAME: ${PG_USER}
       SPRING_DATASOURCE_PASSWORD: ${PG_PASSWORD}
       APP_CORS_ORIGINS: "http://localhost:5173,http://frontend"
-      JAVA_TOOL_OPTIONS: >
-        -Dspring.devtools.restart.poll-interval=2s
-        -Dspring.devtools.restart.quiet-period=1s
-    command: bash -lc "./mvnw -q spring-boot:run -Dspring-boot.run.fork=false"
+    ports:
+      - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "8080:8080"
 
   frontend:
     container_name: todo-frontend

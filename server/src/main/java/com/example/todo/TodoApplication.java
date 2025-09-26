@@ -16,9 +16,11 @@ public class TodoApplication {
 
 	@Bean CommandLineRunner seed(UserRepository users) {
     return args -> users.findByEmail("demo@example.com").orElseGet(() -> {
-      var u = new User();
-      u.setEmail("demo@example.com");
-      u.setPassword("{noop}dev"); // placeholder
+      var u = User.builder()
+      .username("demouser")
+      .email("demo@example.com")
+      .passwordHash("{noop}dev")
+      .build();
       return users.save(u);
     });
   }
