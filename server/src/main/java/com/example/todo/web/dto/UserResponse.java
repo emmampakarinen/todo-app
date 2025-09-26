@@ -2,6 +2,9 @@ package com.example.todo.web.dto;
 
 import java.time.OffsetDateTime;
 
+import lombok.Value;
+
+@Value
 public class UserResponse {
     private Long id;
     private String email;

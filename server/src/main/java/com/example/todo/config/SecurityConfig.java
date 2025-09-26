@@ -12,7 +12,7 @@ public class SecurityConfig {
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder(); // strong hash
+    return new BCryptPasswordEncoder(); // hashing algorithm 
   }
 
   @Bean
@@ -20,7 +20,7 @@ public class SecurityConfig {
     http
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/health").permitAll()
+        .requestMatchers("/", "/login", "/register").permitAll() // whitelist public pages
         .anyRequest().permitAll() // keep open while building; lock down later
       );
     return http.build();
