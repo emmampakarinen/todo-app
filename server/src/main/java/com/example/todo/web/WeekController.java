@@ -8,11 +8,6 @@ import com.example.todo.service.WeekService;
 import com.example.todo.web.dto.NewTodoDTO;
 import com.example.todo.web.dto.NewWeekDTO;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 @RestController @RequestMapping("/api")
 public class WeekController {
     private final WeekService service; 
