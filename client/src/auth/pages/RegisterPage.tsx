@@ -1,7 +1,7 @@
 import { Button, FormControl, FormHelperText, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { register } from "../../../shared/api/auth";
+import { register } from "../../shared/lib/auth";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");

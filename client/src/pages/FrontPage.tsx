@@ -1,7 +1,7 @@
 import { Button } from "@mui/joy";
 import { Link } from "react-router-dom";
 
-export function HomePage() {
+export function FrontPage() {
   return (
     <>
       <div className="flex flex-col items-center justify-center flex-1 gap-2">
@@ -24,4 +24,4 @@ export function HomePage() {
   );
 }
 
-export default HomePage;
+export default FrontPage;

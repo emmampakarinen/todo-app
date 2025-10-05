@@ -1,19 +1,31 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import App from "./App";
-import { LoginPage } from "../features/auth/pages/LoginPage";
-import { RegisterPage } from "../features/auth/pages/RegisterPage";
-import { NotFoundPage } from "../features/pages/NotFoundPage";
-import HomePage from "../features/pages/HomePage";
+import App from "./App"; // contains header/nav + <Outlet/>
+import RequireAuth from "../auth/components/RequireAuth";
+
+import { LoginPage } from "../auth/pages/LoginPage";
+import { RegisterPage } from "../auth/pages/RegisterPage";
+import { FrontPage } from "../pages/FrontPage";
+import { NotFoundPage } from "../pages/NotFoundPage";
 
 export const router = createBrowserRouter([
+  // public routes (no App layout)
+
+  // everything below uses the App layout
   {
     path: "/",
-    element: <App />, // layout with header/nav + <Outlet/>
+    element: <App />,
     children: [
-      { index: true, element: <Navigate to="/home" replace /> },
-      { path: "home", element: <HomePage /> },
-      { path: "login", element: <LoginPage /> },
-      { path: "register", element: <RegisterPage /> },
+      { index: true, element: <Navigate to="home" replace /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> },
+      { path: "/frontpage", element: <FrontPage /> },
+
+      // protect everything inside this group
+      {
+        element: <RequireAuth />,
+        children: [{ path: "home", element: <div>Home</div> }],
+      },
+
       { path: "*", element: <NotFoundPage /> },
     ],
   },
