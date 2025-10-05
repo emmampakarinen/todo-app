@@ -1,11 +1,12 @@
 import { Button, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../shared/lib/auth";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -22,6 +23,8 @@ export function LoginPage() {
       alert("Login successful!");
       setUsername("");
       setPassword("");
+
+      navigate("/home"); // Redirect to home page after login
     } catch (error) {
       console.error("Login error:", error);
       alert("Login failed. Please try again.");

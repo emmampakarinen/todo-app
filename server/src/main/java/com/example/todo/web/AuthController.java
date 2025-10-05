@@ -27,14 +27,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
-        // Registration logic would go here, typically accepting a request body
+
         UserResponse res = userService.register(request);
         return ResponseEntity.ok(res);
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        // Registration logic would go here, typically accepting a request body
+        // check credentials and generate JWT token
         AuthResponse res = userService.login(request);
         return ResponseEntity.ok(res);
     }

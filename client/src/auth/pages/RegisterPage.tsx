@@ -1,6 +1,6 @@
 import { Button, FormControl, FormHelperText, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../shared/lib/auth";
 
 export function RegisterPage() {
@@ -8,6 +8,7 @@ export function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const passwordsMatch = password === confirmPassword;
 
@@ -27,6 +28,8 @@ export function RegisterPage() {
       setUsername("");
       setPassword("");
       setConfirmPassword("");
+
+      navigate("/login"); // Redirect to login page after registrarion
     } catch (error) {
       console.error("Registration error:", error);
       alert("Registration failed. Please try again.");
