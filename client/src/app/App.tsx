@@ -1,28 +1,35 @@
-import { Button } from "@mui/joy";
-import { Link, NavLink, Outlet } from "react-router-dom";
-import { currentUser, logout } from "../shared/lib/auth";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/hooks/useAuth";
 
 export default function App() {
+  const navigate = useNavigate();
+  const { logout, user } = useAuth();
+
   const handleLogout = () => {
     logout();
-    window.location.href = "/frontpage"; // Redirect to front page after logout
+    navigate("/frontpage", { replace: true });
   };
+
+  const isLoggedIn = Boolean(user);
 
   return (
     <div className="min-h-screen flex flex-col">
       <header className=" border-b p-4 flex justify-between items-center">
         <h1 className="font-bold text-lg">CheckIt</h1>
         <nav className="flex gap-4">
-          <NavLink to="/frontpage" className="hover:underline">
-            Home
-          </NavLink>
-          {currentUser() ? (
-            <button
-              onClick={handleLogout}
-              className="hover:underline text-inherit font-normal"
-            >
-              Logout
-            </button>
+          {isLoggedIn ? (
+            <div className="flex gap-4">
+              <NavLink to="/home" className="hover:underline">
+                Home
+              </NavLink>
+              <NavLink
+                onClick={handleLogout}
+                to="/"
+                className="hover:underline"
+              >
+                Logout
+              </NavLink>
+            </div>
           ) : null}
         </nav>
       </header>

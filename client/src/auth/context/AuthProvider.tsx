@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 
-import {
-  currentUser,
-  login as loginApi,
-  logout as logoutApi,
-} from "../../shared/lib/auth";
+import { currentUser, loginApi, logoutApi } from "../../shared/lib/auth";
 import type { LoginData } from "../../types/auth";
 import type { User } from "../../types/user";
 import { AuthContext } from "./auth-context";

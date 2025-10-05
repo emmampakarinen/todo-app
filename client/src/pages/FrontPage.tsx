@@ -1,7 +1,12 @@
 import { Button } from "@mui/joy";
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/hooks/useAuth";
 
 export function FrontPage() {
+  const { user } = useAuth();
+
+  const isLoggedIn = Boolean(user);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center flex-1 gap-2">
@@ -11,14 +16,16 @@ export function FrontPage() {
           matters, finish your week strong, and never lose sight of what’s
           important.
         </h2>
-        <div className="flex flex-row gap-3">
-          <Button variant="outlined" component={Link} to="/register">
-            Register
-          </Button>
-          <Button variant="outlined" component={Link} to="/login">
-            Login
-          </Button>
-        </div>
+        {isLoggedIn ? null : (
+          <div className="flex flex-row gap-3">
+            <Button variant="outlined" component={Link} to="/register">
+              Register
+            </Button>
+            <Button variant="outlined" component={Link} to="/login">
+              Login
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

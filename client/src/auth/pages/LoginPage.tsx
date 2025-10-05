@@ -1,33 +1,31 @@
 import { Button, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../shared/lib/auth";
+import { useAuth } from "../hooks/useAuth";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Implement login logic here
     if (!username || !password) {
-      alert("Please fill in all fields");
       return;
     }
 
     try {
       await login({ username, password });
       console.log("Logging in with:", { username, password });
-      alert("Login successful!");
+
       setUsername("");
       setPassword("");
 
-      navigate("/home"); // Redirect to home page after login
+      navigate("/home", { replace: true }); // Redirect to home page after login
     } catch (error) {
       console.error("Login error:", error);
-      alert("Login failed. Please try again.");
     }
   };
 

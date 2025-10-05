@@ -1,7 +1,7 @@
 import { Button, FormControl, FormHelperText, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../../shared/lib/auth";
+import { registerApi } from "../../shared/lib/auth";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ export function RegisterPage() {
     }
 
     try {
-      const user = await register({ email, username, password });
+      const user = await registerApi({ email, username, password });
       console.log("Registered user:", user);
       alert("Registration successful! You can now log in.");
       setEmail("");
