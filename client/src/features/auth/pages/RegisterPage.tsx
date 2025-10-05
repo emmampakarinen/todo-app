@@ -1,6 +1,7 @@
 import { Button, FormControl, FormHelperText, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { register } from "../../../shared/api/auth";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -10,8 +11,26 @@ export function RegisterPage() {
 
   const passwordsMatch = password === confirmPassword;
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!email || !username || !password || !confirmPassword) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const user = await register({ email, username, password });
+      console.log("Registered user:", user);
+      alert("Registration successful! You can now log in.");
+      setEmail("");
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert("Registration failed. Please try again.");
+    }
   };
 
   return (

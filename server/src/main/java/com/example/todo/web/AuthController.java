@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.todo.service.UserService;
+import com.example.todo.web.dto.AuthResponse;
+import com.example.todo.web.dto.LoginRequest;
 import com.example.todo.web.dto.RegisterRequest;
 import com.example.todo.web.dto.UserResponse;
 
@@ -27,6 +29,13 @@ public class AuthController {
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
         // Registration logic would go here, typically accepting a request body
         UserResponse res = userService.register(request);
+        return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        // Registration logic would go here, typically accepting a request body
+        AuthResponse res = userService.login(request);
         return ResponseEntity.ok(res);
     }
 }

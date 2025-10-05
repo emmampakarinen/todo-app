@@ -5,7 +5,7 @@ spring:
     password: ${PG_PASSWORD:todo_pass}
   jpa:
     hibernate:
-      ddl-auto: update 
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -15,6 +15,11 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
 server:
   port: 8080
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:dev-change-me}
+    expiration-minutes: 120
 
 # Dev CORS, allow Vite on 5173
 app:
