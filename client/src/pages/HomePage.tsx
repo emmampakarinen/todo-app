@@ -1,7 +1,7 @@
 import { Button } from "@mui/joy";
 import { currentUser } from "../shared/lib/auth";
 import WeekSummary from "../components/WeekSummary";
-import TodoLists from "../components/TodoLists";
+import TodoLists from "../components/HomePageLists";
 import OverDueTasks from "../components/OverDueTasks";
 
 export function HomePage() {
@@ -11,11 +11,11 @@ export function HomePage() {
     <>
       <div className="flex flex-row items-stretch justify-center flex-1 gap-2 p-5">
         <WeekSummary />
-        <div className="flex flex-1 flex-col items-stretch justify-center border-4 border-pink-600 rounded-lg p-4">
+        <div className="flex flex-1 flex-col items-stretch justify-center p-2">
           <h3 className="font-sans text-2xl font-extrabold">
             Welcome back {user.username}!
           </h3>
-          <div className="flex flex-row items-stretch justify-center flex-1 gap-2 p-5">
+          <div className="flex flex-row items-stretch justify-center flex-1 gap-2 mt-2 mb-2">
             <TodoLists />
             <OverDueTasks />
           </div>
