@@ -2,8 +2,6 @@ import { Button } from "@mui/joy";
 import { currentUser } from "../shared/lib/auth";
 import WeekSummary from "../components/WeekSummary";
 import TodoLists from "../components/HomePageLists";
-import OverDueTasks from "../components/OverDueTasks";
-
 export function HomePage() {
   const user = currentUser();
 
@@ -17,7 +15,6 @@ export function HomePage() {
           </h3>
           <div className="flex flex-row items-stretch justify-center flex-1 gap-2 mt-2 mb-2">
             <TodoLists />
-            <OverDueTasks />
           </div>
           <div className="flex flex-row justify-evenly gap-4">
             <Button>New list</Button>

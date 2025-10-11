@@ -11,7 +11,6 @@ import lombok.Setter;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-// hello
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,14 +26,22 @@ public class User {
 
     @Column(nullable=false, unique=true)
     private String email; 
+
     @Column(nullable=false, unique=true)
     private String username; 
+
     @Column(nullable=false, name = "password_hash")
     private String passwordHash;
-    @Column(nullable = false) 
-    @Builder.Default private OffsetDateTime createdAt = OffsetDateTime.now();
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default private List<Week> weeks = new ArrayList<>();
+    @Column(nullable = false) 
+    @Builder.Default 
+    private OffsetDateTime createdAt = OffsetDateTime.now();
+
+    @OneToMany(
+        mappedBy="user", 
+        cascade = CascadeType.ALL, 
+        orphanRemoval = true)
+    @Builder.Default 
+    private List<TodoList> todoLists = new ArrayList<>();
 
 }
