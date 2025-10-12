@@ -22,7 +22,7 @@ public class TodoList {
     private String listName;
 
     @OneToMany(
-        mappedBy="list_name", 
+        mappedBy="todoList", 
         cascade=CascadeType.ALL, 
         orphanRemoval=true
         )

@@ -9,9 +9,9 @@ import com.example.todo.web.dto.NewTodoDTO;
 import com.example.todo.web.dto.NewListDTO;
 
 @RestController @RequestMapping("/api")
-public class WeekController {
+public class TodoListController {
     private final ListService service; 
-    public WeekController(ListService service) { this.service = service; }
+    public TodoListController(ListService service) { this.service = service; }
 
     private Long currentUserId() { return 1L; } // temp
 
@@ -47,7 +47,7 @@ public class WeekController {
     }
 
     // weekly view - list all todos due this week for a user
-    @GetMapping("/weeks/{monday}/todos")
+    @GetMapping("/lists/{monday}/todos")
     public List<Todo> weeklyTodos(@PathVariable String monday) {
         return service.weeklyTodos(currentUserId(), LocalDate.parse(monday));
     }
