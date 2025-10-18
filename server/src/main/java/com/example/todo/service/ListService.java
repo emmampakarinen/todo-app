@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.todo.model.*;
 import com.example.todo.repo.*;
+import com.example.todo.web.dto.ListDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -29,13 +30,14 @@ public class ListService {
 
     // creating a new list for a user
     @Transactional
-    public TodoList createTodoList(Long userId, String listName) {
+    public TodoList createTodoList(Long userId, ListDTO list) {
         var user = users.findById(userId).orElseThrow();
-        return lists.findByUser_IdAndListName(userId, listName)
+        return lists.findByUser_IdAndListName(userId, list.name())
             .orElseGet(() -> {
                 var l = new TodoList();
                 l.setUser(user); 
-                l.setListName(listName);
+                l.setListName(list.name());
+                l.setDescription(list.description());
                 return lists.save(l);
             });
     }

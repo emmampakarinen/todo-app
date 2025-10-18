@@ -43,6 +43,7 @@ public class JwtService {
 
     public String generate(String username, Long userId) {
         var now = Instant.now();
+        // add userid and username to token
         return Jwts.builder()
                 .subject(username)
                 .claim("uid", userId)
@@ -52,6 +53,7 @@ public class JwtService {
                 .compact();
     }
 
+    // extract username from token
     public String username(String token) {
         return Jwts.parser()
                 .verifyWith(signingKey)
@@ -59,5 +61,15 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    // extract userId from token
+    public Long userId(String token) {
+    return Jwts.parser()
+            .verifyWith(signingKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload()
+            .get("uid", Long.class);
     }
 }

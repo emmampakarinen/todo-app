@@ -21,6 +21,9 @@ public class TodoList {
     @Column(name="list_name", nullable=false, length=120)
     private String listName;
 
+    @Column(name="description", length=225)
+    private String description;
+
     @OneToMany(
         mappedBy="todoList", 
         cascade=CascadeType.ALL, 
