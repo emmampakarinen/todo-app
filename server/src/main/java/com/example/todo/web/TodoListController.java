@@ -49,9 +49,9 @@ public class TodoListController {
 
          // prepare response body
         NewListDTOResponse dto = new NewListDTOResponse(
-        created.getId(),
-        created.getListName(),
-        created.getDescription()
+            created.getId(),
+            created.getListName(),
+            created.getDescription()
         );
 
         // return 201 Created with Location header

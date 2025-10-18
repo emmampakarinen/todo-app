@@ -1,5 +1,4 @@
 import { Checkbox, FormControl, FormHelperText } from "@mui/joy";
-import React from "react";
 
 function Todo() {
   return (
