@@ -31,6 +31,7 @@ public class User {
     private String username; 
 
     @Column(nullable=false, name = "password_hash")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private String passwordHash;
 
     @Column(nullable = false) 
@@ -42,6 +43,7 @@ public class User {
         cascade = CascadeType.ALL, 
         orphanRemoval = true)
     @Builder.Default 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<TodoList> todoLists = new ArrayList<>();
 
 }

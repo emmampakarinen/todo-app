@@ -1,9 +1,7 @@
 package com.example.todo.web;
-
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +9,10 @@ import com.example.todo.model.*;
 import com.example.todo.service.JwtService;
 import com.example.todo.service.ListService;
 import com.example.todo.web.dto.NewTodoDTO;
-import com.example.todo.web.dto.ListDTO;
-import com.example.todo.web.dto.NewListDTOResponse;
+import com.example.todo.web.dto.TodoDTO;
+import com.example.todo.web.dto.TodoListDTO;
+import com.example.todo.web.dto.NewListRequest;
+import com.example.todo.web.dto.NewListResponse;
 
 @RestController @RequestMapping("/api")
 public class TodoListController {
@@ -25,17 +25,32 @@ public class TodoListController {
 
     // returning all lists for a user
     @GetMapping("/lists")
-    public List<TodoList> lisTodoLists(@RequestHeader("Authorization") String header) {
+    public List<TodoListDTO> lisTodoLists(@RequestHeader("Authorization") String header) {
         String token = header.substring(7); // remove "Bearer "
         Long currentUserId = jwtService.userId(token);
 
-        return service.listTodoLists(currentUserId);
+        return service.listTodoLists(currentUserId).stream()
+            .map(l -> new TodoListDTO(
+                l.getId(),
+                l.getListName(),
+                l.getDescription(),
+                l.getTodos().stream()
+                    .map(t -> new TodoDTO(
+                        t.getId(),
+                        t.getTitle(),
+                        t.isDone(),
+                        t.getPosition(),
+                        t.getDueAt()
+                    ))
+                    .toList()
+            ))
+            .toList();
     }
     
     // creating a new list for a user
     @PostMapping("/lists")
-    public ResponseEntity<NewListDTOResponse> createTodoList(
-        @RequestBody ListDTO body,
+    public ResponseEntity<NewListResponse> createTodoList(
+        @RequestBody NewListRequest body,
         @RequestHeader("Authorization") String header
     ) {
         String token = header.substring(7);
@@ -48,7 +63,7 @@ public class TodoListController {
         }
 
          // prepare response body
-        NewListDTOResponse dto = new NewListDTOResponse(
+        NewListResponse dto = new NewListResponse(
             created.getId(),
             created.getListName(),
             created.getDescription()

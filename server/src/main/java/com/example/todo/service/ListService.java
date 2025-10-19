@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.todo.model.*;
 import com.example.todo.repo.*;
-import com.example.todo.web.dto.ListDTO;
+import com.example.todo.web.dto.NewListRequest;
 
 import jakarta.transaction.Transactional;
 
@@ -30,7 +30,7 @@ public class ListService {
 
     // creating a new list for a user
     @Transactional
-    public TodoList createTodoList(Long userId, ListDTO list) {
+    public TodoList createTodoList(Long userId, NewListRequest list) {
         var user = users.findById(userId).orElseThrow();
         return lists.findByUser_IdAndListName(userId, list.name())
             .orElseGet(() -> {

@@ -1,11 +1,11 @@
 import type { Todo } from "./todo";
 
-export interface List {
+export type List = {
   id: number;
   name: string;
   description: string;
   todos?: Todo[];
-}
+};
 
 export interface NewList {
   name: string;

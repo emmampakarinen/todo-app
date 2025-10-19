@@ -1,10 +1,10 @@
-import React from "react";
 import TodoList from "./TodoList";
+import type { List } from "../types/list";
 
-function WeekSummary() {
+function WeekSummary({ lists, loading }: { lists: List[]; loading: boolean }) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center border-4 border-pink-600 rounded-lg p-4">
-      <TodoList />
+    <div className="h-full rounded-lg border-4 border-pink-600 p-4">
+      <TodoList lists={lists} loading={loading} />
     </div>
   );
 }
