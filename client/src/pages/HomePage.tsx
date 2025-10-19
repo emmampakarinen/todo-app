@@ -7,6 +7,8 @@ import OverDueTodos from "../components/OverDueTodos";
 import { getListsApi } from "../shared/lib/lists";
 import type { List } from "../types/list";
 import NewTodoModal from "../components/NewTodoModal";
+import dayjs from "dayjs";
+import weekOfYear from "dayjs/plugin/weekOfYear";
 
 export function HomePage() {
   const user = currentUser();
@@ -14,6 +16,7 @@ export function HomePage() {
   const [openListModal, setOpenListModal] = useState(false);
   const [lists, setLists] = useState<List[]>([]);
   const [loading, setLoading] = useState(true);
+  dayjs.extend(weekOfYear);
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -34,7 +37,7 @@ export function HomePage() {
   return (
     <>
       <div className="flex flex-col items-stretch gap-2 p-5">
-        <h1>week number</h1>
+        <h2 className="text-3xl">Week {dayjs().week()}</h2>
         <h3 className="font-sans text-2xl font-extrabold">
           Welcome back {user.username}!
         </h3>
