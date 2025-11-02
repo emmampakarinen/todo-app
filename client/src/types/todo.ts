@@ -14,5 +14,5 @@ export interface NewTodo {
   title: string;
   todoListId: number;
   description?: string;
-  dueDate?: string;
+  dueAt?: string;
 }

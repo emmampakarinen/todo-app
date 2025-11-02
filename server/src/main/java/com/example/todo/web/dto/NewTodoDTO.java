@@ -6,5 +6,5 @@ public record NewTodoDTO(
     Long todoListId, 
     String title, 
     String description, 
-    LocalDate dueDate) 
+    LocalDate dueAt) 
 {}

@@ -40,7 +40,7 @@ function NewTodoModal({
         todoListId: todoListId,
         title: todoName,
         description: note,
-        dueDate: dueDate || undefined,
+        dueAt: dueDate || undefined,
       });
       console.log("Todo created:", { todoName, todoListId, note, dueAt });
 

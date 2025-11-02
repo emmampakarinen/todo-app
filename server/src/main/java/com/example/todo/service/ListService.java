@@ -51,14 +51,14 @@ public class ListService {
 
     // create a new to do in a specific list
     @Transactional
-    public TodoDTO addTodo(Long todoListId, String title, String description, LocalDate dueDate) {
+    public TodoDTO addTodo(Long todoListId, String title, String description, LocalDate dueAt) {
         var list = lists.findById(todoListId).orElseThrow();
 
         var t = new Todo();
         t.setTodoList(list);
         t.setTitle(title);
         t.setDescription(description);
-        t.setDueAt(dueDate);
+        t.setDueAt(dueAt);
         
         var saved = todos.save(t); 
 

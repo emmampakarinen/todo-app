@@ -87,7 +87,7 @@ public class TodoListController {
     // create a new to do for a list
     @PostMapping("/todos")
     public TodoDTO addTodo(@RequestBody NewTodoDTO body) {
-        return service.addTodo(body.todoListId(), body.title(), body.description(), body.dueDate());
+        return service.addTodo(body.todoListId(), body.title(), body.description(), body.dueAt());
     }
     
     // todo is either done or not done, which can be changed

@@ -10,7 +10,7 @@ public record TodoDTO (
     String description,
     boolean done, 
     Integer position, 
-    LocalDate dueDate, 
+    LocalDate dueAt, 
     LocalDateTime createdAt,
     LocalDateTime updatedAt) 
     {}
