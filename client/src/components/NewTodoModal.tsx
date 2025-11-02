@@ -15,6 +15,7 @@ import type { List } from "../types/list";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
+import { createTodoApi } from "../shared/lib/todo";
 
 function NewTodoModal({
   open,
@@ -26,17 +27,30 @@ function NewTodoModal({
   lists: List[];
 }) {
   const [todoName, setTodoName] = useState("");
-  const [todoList, setTodoList] = useState("");
+  const [todoListId, setTodoListId] = useState(0);
   const [note, setNote] = useState("");
   const [dueAt, setDueAt] = useState<Dayjs | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    const dueDate = dueAt ? dueAt.format("YYYY-MM-DD") : null;
+    console.log(todoListId);
     try {
-      // todo: call create list api
+      await createTodoApi({
+        todoListId: todoListId,
+        title: todoName,
+        description: note,
+        dueDate: dueDate || undefined,
+      });
+      console.log("Todo created:", { todoName, todoListId, note, dueAt });
+
+      setTodoName("");
+      setTodoListId(0);
+      setNote("");
+      setDueAt(null);
+      onClose();
     } catch (error) {
-      console.error("Error creating list:", error);
+      console.error("Error creating todo:", error);
     }
   };
 
@@ -61,13 +75,18 @@ function NewTodoModal({
           <Stack spacing={2}>
             <FormControl>
               <FormLabel>Select which list this todo belongs to</FormLabel>
-              <Select placeholder="Select list" required>
+              <Select<number>
+                placeholder="Select list"
+                required
+                value={todoListId}
+                onChange={(_, value) => {
+                  if (value != null) {
+                    setTodoListId(value);
+                  }
+                }}
+              >
                 {lists.map((list) => (
-                  <Option
-                    key={list.id}
-                    value={list.name}
-                    onChange={() => setTodoList(list.name)}
-                  >
+                  <Option key={list.id} value={list.id}>
                     {list.name}
                   </Option>
                 ))}

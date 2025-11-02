@@ -2,7 +2,6 @@ package com.example.todo.web;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.todo.model.*;
@@ -37,10 +36,14 @@ public class TodoListController {
                 l.getTodos().stream()
                     .map(t -> new TodoDTO(
                         t.getId(),
+                        l.getId(),
                         t.getTitle(),
+                        t.getDescription(),
                         t.isDone(),
                         t.getPosition(),
-                        t.getDueAt()
+                        t.getDueAt(), 
+                        t.getCreatedAt(),
+                        t.getUpdatedAt()
                     ))
                     .toList()
             ))
@@ -83,8 +86,8 @@ public class TodoListController {
 
     // create a new to do for a list
     @PostMapping("/todos")
-    public Todo addTodo(@RequestBody NewTodoDTO body) {
-        return service.addTodo(body.todoListId(), body.title());
+    public TodoDTO addTodo(@RequestBody NewTodoDTO body) {
+        return service.addTodo(body.todoListId(), body.title(), body.description(), body.dueDate());
     }
     
     // todo is either done or not done, which can be changed

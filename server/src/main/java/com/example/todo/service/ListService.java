@@ -1,6 +1,7 @@
 package com.example.todo.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.todo.model.*;
 import com.example.todo.repo.*;
 import com.example.todo.web.dto.NewListRequest;
+import com.example.todo.web.dto.TodoDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -47,16 +49,30 @@ public class ListService {
         return todos.findByTodoList_IdOrderByPositionAsc(listId);
     } 
 
-    // create a new to do for the current week
+    // create a new to do in a specific list
     @Transactional
-    public Todo addTodo(Long todoListId, String title) {
+    public TodoDTO addTodo(Long todoListId, String title, String description, LocalDate dueDate) {
         var list = lists.findById(todoListId).orElseThrow();
 
         var t = new Todo();
         t.setTodoList(list);
         t.setTitle(title);
+        t.setDescription(description);
+        t.setDueAt(dueDate);
         
-        return t; 
+        var saved = todos.save(t); 
+
+        return new TodoDTO(
+            saved.getId(),
+            saved.getTodoListId(),
+            saved.getTitle(),
+            saved.getDescription(),
+            saved.isDone(),
+            saved.getPosition(),
+            saved.getDueAt(), 
+            saved.getCreatedAt(), 
+            saved.getUpdatedAt()
+        );
     } 
 
     // todo is either done or not done, which can be changed

@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
 @Setter
@@ -17,14 +21,19 @@ public class Todo {
     private Long id;
 
     // a list can have many todos
+    @JsonIgnore // avoid circular reference in JSON serialization
     @ManyToOne(optional=false) @JoinColumn(name="list_id", nullable = false)
     private TodoList todoList;
+
+    // expose the todoListId in the JSON representation
+    @JsonProperty("todoListId")
+    public Long getTodoListId() { return todoList != null ? todoList.getId() : null; }
 
     @Column(nullable=false)
     private String title;
 
     @Column(columnDefinition = "text")
-    private String notes;
+    private String description;
 
     @Column(nullable = false)
     private boolean done = false;
@@ -33,7 +42,7 @@ public class Todo {
     private Integer position = 0;
 
     @Column(name = "due_at")
-    private LocalDateTime dueAt;
+    private LocalDate dueAt;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -1,12 +1,18 @@
 export interface Todo {
   id: number;
+  todoList: number;
   title: string;
-  completed: boolean;
-  listId: number;
+  description?: string;
+  done: boolean;
+  position: number;
+  dueAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface NewTodo {
   title: string;
-  completed?: boolean;
+  todoListId: number;
+  description?: string;
   dueDate?: string;
 }

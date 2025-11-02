@@ -1,5 +1,10 @@
 package com.example.todo.web.dto;
 
-public record NewTodoDTO(Long todoListId, String title) {
-    
-}
+import java.time.LocalDate;
+
+public record NewTodoDTO(
+    Long todoListId, 
+    String title, 
+    String description, 
+    LocalDate dueDate) 
+{}
