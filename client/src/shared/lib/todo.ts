@@ -15,6 +15,10 @@ export const toggleTodoDoneApi = async (
   return response.data;
 };
 
+export const deleteTodoApi = async (id: number): Promise<void> => {
+  await api.delete(`/todos/${id}`);
+};
+
 // Get all todo lists
 export const getTodosApi = async (listId: number): Promise<Todo[]> => {
   const response = await api.get<Todo[]>(`/lists/${listId}/todos`);

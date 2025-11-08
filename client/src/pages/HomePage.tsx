@@ -34,6 +34,18 @@ export function HomePage() {
     fetchLists();
   }, []);
 
+  // Handle deletion of a todo item
+  const handleTodoDeleted = (listId: number, todoId: number) => {
+    setLists((prev) =>
+      prev.map(
+        (l) =>
+          l.id === listId // find the right list
+            ? { ...l, todos: (l.todos ?? []).filter((t) => t.id !== todoId) } // remove the todo
+            : l // leave other lists unchanged
+      )
+    );
+  };
+
   return (
     <>
       <div className="flex flex-col items-stretch gap-2 p-5">
@@ -42,9 +54,13 @@ export function HomePage() {
           Welcome back {user.username}!
         </h3>
       </div>
-      <div className="flex w-full flex-1 flex-row items-stretch gap-5 p-5">
+      <div className=" flex w-full flex-1 flex-row items-stretch gap-5 p-5">
         <div className="flex-1 min-w-0">
-          <WeekSummary lists={lists} loading={loading} />
+          <WeekSummary
+            lists={lists}
+            loading={loading}
+            onTodoDeleted={handleTodoDeleted}
+          />
         </div>
 
         <div className="flex-1 min-w-0">

@@ -14,8 +14,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className=" border-b p-4 flex justify-between items-center">
-        <h1 className="font-bold text-lg">CheckIt</h1>
+      <header className="bg-[var(--color-blush-200)] border-b p-4 flex justify-between items-center">
+        <h1 className="font-bold text-3xl">CheckIt</h1>
         <nav className="flex gap-4">
           {isLoggedIn ? (
             <div className="flex gap-4">

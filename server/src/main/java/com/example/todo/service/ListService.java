@@ -1,7 +1,6 @@
 package com.example.todo.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -81,6 +80,11 @@ public class ListService {
         var t = todos.findById(todoId).orElseThrow();
         t.setDone(done);
         return t;
+    }
+
+    @Transactional
+    public void deleteTodo(Long todoId) {
+        todos.deleteById(todoId);
     }
 
     // weekly view - list all todos due this week for a user

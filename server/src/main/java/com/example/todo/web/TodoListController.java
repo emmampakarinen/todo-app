@@ -96,6 +96,13 @@ public class TodoListController {
         return service.toggleDone(id, done);
     }
 
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        service.deleteTodo(id);
+        return ResponseEntity.noContent().build(); // returns 204 No Content
+    }
+
+
     // weekly view - list all todos due this week for a user
     @GetMapping("/weeks/{monday}/todos")
     public List<Todo> weeklyTodos(
