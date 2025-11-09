@@ -1,4 +1,4 @@
-import type { NewTodo, Todo } from "../../types/todo";
+import type { EditTodo, NewTodo, Todo } from "../../types/todo";
 import { api } from "../api/api";
 
 // Create a new todo list
@@ -17,6 +17,11 @@ export const toggleTodoDoneApi = async (
 
 export const deleteTodoApi = async (id: number): Promise<void> => {
   await api.delete(`/todos/${id}`);
+};
+
+export const editTodoApi = async (data: EditTodo): Promise<Todo> => {
+  const response = await api.patch<Todo>(`/todos/${data.id}/edit`, data);
+  return response.data;
 };
 
 // Get all todo lists

@@ -1,7 +1,6 @@
 package com.example.todo.web.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record TodoDTO (
     Long id, 
@@ -11,6 +10,6 @@ public record TodoDTO (
     boolean done, 
     Integer position, 
     LocalDate dueAt, 
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt) 
+    LocalDate createdAt,
+    LocalDate updatedAt) 
     {}

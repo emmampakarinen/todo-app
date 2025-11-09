@@ -1,23 +1,50 @@
+import { useEffect, useState } from "react";
 import type { List } from "../types/list";
+import EditTodoModal from "./EditTodoModal";
 import TodoItem from "./TodoItem";
+import type { Todo } from "../types/todo";
 
-function TodoList({
-  lists,
-  loading,
-  onTodoDeleted,
-}: {
-  lists: List[];
-  loading: boolean;
-  onTodoDeleted: (listId: number, todoId: number) => void;
-}) {
+function TodoList({ lists, loading }: { lists: List[]; loading: boolean }) {
+  const [editingTodo, setEditing] = useState<Todo | null>(null);
+  const [data, setData] = useState<List[]>(lists);
+
+  useEffect(() => setData(lists), [lists]);
+
   // Show loading state
   if (loading) {
     return <div className="p-4">Loading lists…</div>;
   }
 
+  // Remove todo from state after deletion
+  const handleTodoDeleted = (listId: number, todoId: number) => {
+    setData((prev) =>
+      prev.map((l) =>
+        l.id === listId
+          ? { ...l, todos: l.todos?.filter((t) => t.id !== todoId) ?? [] }
+          : l
+      )
+    );
+  };
+
+  // Update todo in state after editing
+  const handleTodoEdited = (updated: Todo) => {
+    setData((prev) =>
+      prev.map((l) =>
+        l.id === updated.todoListId
+          ? {
+              ...l,
+              todos: (l.todos ?? []).map((t) =>
+                t.id === updated.id ? updated : t
+              ),
+            }
+          : l
+      )
+    );
+  };
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-4">
-      {lists.map((list) => (
+      {data.map((list) => (
         <div
           key={list.id}
           className="border-4 bg-[var(--color-blush-50)] border-white rounded-lg p-3 w-full mb-4"
@@ -32,7 +59,8 @@ function TodoList({
                 <TodoItem
                   key={todo.id}
                   todo={todo}
-                  onDeleted={(todoId) => onTodoDeleted(list.id, todoId)}
+                  onDeleted={(todoId) => handleTodoDeleted(list.id, todoId)}
+                  onEdit={(t) => setEditing(t)}
                 />
               ))
             ) : (
@@ -43,7 +71,21 @@ function TodoList({
           </div>
         </div>
       ))}
-      {lists.length === 0 && <p>No todo lists available.</p>}
+      {data.length === 0 && <p>No todo lists available.</p>}
+      {editingTodo && (
+        <EditTodoModal
+          open
+          onClose={() => setEditing(null)}
+          todo={editingTodo}
+          listName={
+            data.find((l) => l.id === editingTodo.todoListId)?.name ?? "—" // get list name
+          }
+          onSaved={(updated) => {
+            handleTodoEdited(updated); // updates UI immediately
+            setEditing(null);
+          }}
+        />
+      )}
     </div>
   );
 }

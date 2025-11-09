@@ -10,6 +10,7 @@ import com.example.todo.service.ListService;
 import com.example.todo.web.dto.NewTodoDTO;
 import com.example.todo.web.dto.TodoDTO;
 import com.example.todo.web.dto.TodoListDTO;
+import com.example.todo.web.dto.EditTodoDTO;
 import com.example.todo.web.dto.NewListRequest;
 import com.example.todo.web.dto.NewListResponse;
 
@@ -94,6 +95,11 @@ public class TodoListController {
     @PatchMapping("todos/{id}/done/{done}")
     public Todo toggleDone(@PathVariable Long id, @PathVariable boolean done) {
         return service.toggleDone(id, done);
+    }
+
+    @PatchMapping("todos/{id}/edit")
+    public Todo editTodo(@RequestBody EditTodoDTO body) {
+        return service.editTodo(body);
     }
 
     @DeleteMapping("/todos/{id}")

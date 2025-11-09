@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.todo.model.*;
 import com.example.todo.repo.*;
+import com.example.todo.web.dto.EditTodoDTO;
 import com.example.todo.web.dto.NewListRequest;
 import com.example.todo.web.dto.TodoDTO;
 
@@ -79,6 +80,19 @@ public class ListService {
     public Todo toggleDone(Long todoId, boolean done) {
         var t = todos.findById(todoId).orElseThrow();
         t.setDone(done);
+        return t;
+    }
+
+    @Transactional
+    public Todo editTodo(EditTodoDTO todo) {
+        var t = todos.findById(todo.id()).orElseThrow();
+        
+        if (todo.title() != null) t.setTitle(todo.title());
+        if (todo.description() != null) t.setDescription(todo.description());
+        if (todo.dueAt() != null) t.setDueAt(todo.dueAt());
+        
+        t.setUpdatedAt(LocalDate.now());
+
         return t;
     }
 

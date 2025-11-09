@@ -3,17 +3,21 @@ import type { Todo } from "../types/todo";
 import { useState } from "react";
 import { deleteTodoApi, toggleTodoDoneApi } from "../shared/lib/todo";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import dayjs from "dayjs";
 
 function TodoItem({
   todo,
   onDeleted,
+  onEdit,
 }: {
   todo: Todo;
   onDeleted: (id: number) => void;
+  onEdit: (todo: Todo) => void;
 }) {
   const [done, setDone] = useState(todo.done);
   const [deleting, setDeleting] = useState(false);
+
   const isOverdue =
     todo.dueAt && dayjs(todo.dueAt).isBefore(dayjs(), "day") && !done;
 
@@ -77,15 +81,24 @@ function TodoItem({
           </FormHelperText>
         </FormControl>
       </div>
-
-      <IconButton
-        disabled={deleting}
-        aria-label="delete"
-        size="sm"
-        onClick={handleDelete}
-      >
-        <DeleteIcon />
-      </IconButton>
+      <div className="flex flex-col gap-2 mt-1">
+        <IconButton
+          disabled={deleting}
+          aria-label="delete"
+          size="sm"
+          onClick={handleDelete}
+        >
+          <DeleteIcon />
+        </IconButton>
+        <IconButton
+          disabled={deleting}
+          aria-label="edit"
+          size="sm"
+          onClick={() => onEdit(todo)}
+        >
+          <EditIcon />
+        </IconButton>
+      </div>
     </div>
   );
 }

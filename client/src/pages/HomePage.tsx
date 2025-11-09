@@ -33,18 +33,6 @@ export function HomePage() {
     fetchLists();
   }, []);
 
-  // Handle deletion of a todo item
-  const handleTodoDeleted = (listId: number, todoId: number) => {
-    setLists((prev) =>
-      prev.map(
-        (l) =>
-          l.id === listId // find the right list
-            ? { ...l, todos: (l.todos ?? []).filter((t) => t.id !== todoId) } // remove the todo
-            : l // leave other lists unchanged
-      )
-    );
-  };
-
   return (
     <>
       <div className="flex flex-col items-stretch gap-2 p-5">
@@ -55,11 +43,7 @@ export function HomePage() {
       </div>
       <div className="flex flex-col items-stretch gap-5 p-5">
         <div className="flex-1 min-w-0">
-          <WeekSummary
-            lists={lists}
-            loading={loading}
-            onTodoDeleted={handleTodoDeleted}
-          />
+          <WeekSummary lists={lists} loading={loading} />
         </div>
 
         <div className="flex flex-row justify-evenly gap-4">
