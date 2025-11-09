@@ -1,6 +1,6 @@
 export interface Todo {
   id: number;
-  todoList: number;
+  todoListId: number;
   title: string;
   description?: string;
   done: boolean;
@@ -13,6 +13,13 @@ export interface Todo {
 export interface NewTodo {
   title: string;
   todoListId: number;
+  description?: string;
+  dueAt?: string;
+}
+
+export interface EditTodo {
+  id: number;
+  title?: string;
   description?: string;
   dueAt?: string;
 }
