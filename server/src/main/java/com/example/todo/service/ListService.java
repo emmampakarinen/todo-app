@@ -101,6 +101,11 @@ public class ListService {
         todos.deleteById(todoId);
     }
 
+    @Transactional
+    public void deleteList(Long todoId) {
+        lists.deleteById(todoId);
+    }
+
     // weekly view - list all todos due this week for a user
     public List<Todo> weeklyTodos(Long userId, LocalDate weekStart) {
         var start = weekStart.atStartOfDay();

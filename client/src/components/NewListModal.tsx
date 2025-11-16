@@ -10,13 +10,16 @@ import {
 import Modal from "@mui/joy/Modal";
 import { useState, type FormEvent } from "react";
 import { createListApi } from "../shared/lib/lists";
+import type { List } from "../types/list";
 
 function NewListModal({
   open,
   onClose,
+  onListCreated,
 }: {
   open: boolean;
   onClose: () => void;
+  onListCreated: (list: List) => void;
 }) {
   const [listName, setListName] = useState("");
   const [listDescription, setListDescription] = useState("");
@@ -29,8 +32,13 @@ function NewListModal({
     }
 
     try {
-      await createListApi({ name: listName, description: listDescription });
+      const newList = await createListApi({
+        name: listName,
+        description: listDescription,
+      });
       console.log("List created:", { listName, listDescription });
+
+      onListCreated(newList);
 
       setListName("");
       setListDescription("");

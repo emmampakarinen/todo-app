@@ -17,6 +17,7 @@ export function HomePage() {
   const [loading, setLoading] = useState(true);
   dayjs.extend(weekOfYear);
 
+  // Fetch lists on component mount
   useEffect(() => {
     const fetchLists = async () => {
       try {
@@ -32,6 +33,11 @@ export function HomePage() {
 
     fetchLists();
   }, []);
+
+  // Handler for when a new list is created
+  const handleListCreated = (newList: List) => {
+    setLists((prev) => [...prev, newList]); // Append the new list to the existing lists
+  };
 
   return (
     <>
@@ -54,6 +60,7 @@ export function HomePage() {
       <NewListModal
         open={openListModal}
         onClose={() => setOpenListModal(false)}
+        onListCreated={handleListCreated}
       />
       <NewTodoModal
         open={openTodoModal}
