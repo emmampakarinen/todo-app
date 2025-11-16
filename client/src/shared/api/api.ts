@@ -3,8 +3,8 @@ import { clearAuth, getToken } from "../lib/token";
 
 // Create an axios instance with default settings
 export const api = axios.create({
-  baseURL: "http://localhost:8080/api",
-  withCredentials: false,
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: false, // token-based auth, no cookies
   headers: { "Content-Type": "application/json", Accept: "application/json" },
 });
 
