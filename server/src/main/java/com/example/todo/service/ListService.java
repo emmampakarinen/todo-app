@@ -102,8 +102,8 @@ public class ListService {
     }
 
     @Transactional
-    public void deleteList(Long todoId) {
-        lists.deleteById(todoId);
+    public void deleteList(Long listId) {
+        lists.deleteById(listId);
     }
 
     // weekly view - list all todos due this week for a user

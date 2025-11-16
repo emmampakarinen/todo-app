@@ -3,8 +3,19 @@ import type { List } from "../types/list";
 import EditTodoModal from "./EditTodoModal";
 import TodoItem from "./TodoItem";
 import type { Todo } from "../types/todo";
+import { IconButton } from "@mui/joy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { deleteListApi } from "../shared/lib/lists";
 
-function TodoList({ lists, loading }: { lists: List[]; loading: boolean }) {
+function TodoList({
+  lists,
+  loading,
+  onListDeleted,
+}: {
+  lists: List[];
+  loading: boolean;
+  onListDeleted: (listId: number) => void;
+}) {
   const [editingTodo, setEditing] = useState<Todo | null>(null);
   const [data, setData] = useState<List[]>(lists);
 
@@ -42,6 +53,16 @@ function TodoList({ lists, loading }: { lists: List[]; loading: boolean }) {
     );
   };
 
+  // Update todo in state after editing
+  const handleListDelete = async (listId: number) => {
+    try {
+      await deleteListApi(listId);
+      onListDeleted(listId); // tell parent to remove from state
+    } catch (err) {
+      console.error("Failed to delete list:", err);
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-4">
       {data.map((list) => (
@@ -49,10 +70,22 @@ function TodoList({ lists, loading }: { lists: List[]; loading: boolean }) {
           key={list.id}
           className="border-4 bg-[var(--color-blush-50)] border-white rounded-lg p-3 w-full mb-4"
         >
-          <h2 className="text-xl text-[var(--color-text-red)] font-bold">
-            {list.name}
-          </h2>
-          <p className="text-gray-600">{list.description}</p>
+          <div className="flex flex-row justify-between items-center">
+            <div>
+              <h2 className="text-xl text-[var(--color-text-red)] font-bold">
+                {list.name}
+              </h2>
+              <p className="text-gray-600">{list.description}</p>
+            </div>
+            <IconButton
+              aria-label="delete"
+              size="sm"
+              onClick={() => handleListDelete(list.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
+
           <div className="flex flex-col gap-2 mt-2">
             {(list.todos?.length ?? 0) > 0 ? (
               list.todos!.map((todo) => (

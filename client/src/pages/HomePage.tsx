@@ -40,6 +40,12 @@ export function HomePage() {
     setLists((prev) => [...prev, newList]); // Append the new list to the existing lists
   };
 
+  // Handler for when a list is deleted
+  const handleListDeleted = (listId: number) => {
+    setLists((prev) => prev.filter((l) => l.id !== listId)); // Remove the deleted list from the existing lists
+  };
+
+  // Handler for when a new todo is created
   const handleTodoCreated = (newTodo: Todo) => {
     setLists((prev) =>
       prev.map((list) =>
@@ -63,7 +69,11 @@ export function HomePage() {
       </div>
       <div className="flex flex-col items-stretch gap-5 p-5">
         <div className="flex-1 min-w-0">
-          <WeekSummary lists={lists} loading={loading} />
+          <WeekSummary
+            lists={lists}
+            loading={loading}
+            onListDeleted={handleListDeleted}
+          />
         </div>
 
         <div className="flex flex-row justify-evenly gap-4">

@@ -12,3 +12,8 @@ export const getListsApi = async (): Promise<List[]> => {
   const response = await api.get<List[]>("/lists");
   return response.data;
 };
+
+// Get all todo lists
+export const deleteListApi = async (id: number): Promise<void> => {
+  await api.delete(`/list/${id}`);
+};
