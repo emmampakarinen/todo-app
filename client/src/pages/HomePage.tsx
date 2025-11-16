@@ -8,6 +8,7 @@ import type { List } from "../types/list";
 import NewTodoModal from "../components/NewTodoModal";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import type { Todo } from "../types/todo";
 
 export function HomePage() {
   const user = currentUser();
@@ -39,6 +40,19 @@ export function HomePage() {
     setLists((prev) => [...prev, newList]); // Append the new list to the existing lists
   };
 
+  const handleTodoCreated = (newTodo: Todo) => {
+    setLists((prev) =>
+      prev.map((list) =>
+        list.id === newTodo.todoListId
+          ? {
+              ...list,
+              todos: [...(list.todos ?? []), newTodo],
+            }
+          : list
+      )
+    );
+  };
+
   return (
     <>
       <div className="flex flex-col items-stretch gap-2 p-5">
@@ -66,6 +80,7 @@ export function HomePage() {
         open={openTodoModal}
         onClose={() => setOpenTodoModal(false)}
         lists={lists}
+        onTodoCreated={handleTodoCreated}
       />
     </>
   );

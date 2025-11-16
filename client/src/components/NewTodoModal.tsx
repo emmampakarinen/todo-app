@@ -16,15 +16,18 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import { createTodoApi } from "../shared/lib/todo";
+import type { Todo } from "../types/todo";
 
 function NewTodoModal({
   open,
   onClose,
   lists,
+  onTodoCreated,
 }: {
   open: boolean;
   onClose: () => void;
   lists: List[];
+  onTodoCreated: (newTodo: Todo) => void;
 }) {
   const [todoName, setTodoName] = useState("");
   const [todoListId, setTodoListId] = useState(0);
@@ -36,7 +39,7 @@ function NewTodoModal({
     const dueDate = dueAt ? dueAt.format("YYYY-MM-DD") : null;
     console.log(todoListId);
     try {
-      await createTodoApi({
+      const newTodo = await createTodoApi({
         todoListId: todoListId,
         title: todoName,
         description: note,
@@ -44,6 +47,7 @@ function NewTodoModal({
       });
       console.log("Todo created:", { todoName, todoListId, note, dueAt });
 
+      onTodoCreated(newTodo);
       setTodoName("");
       setTodoListId(0);
       setNote("");
