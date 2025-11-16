@@ -38,7 +38,7 @@ public class SecurityConfig {
   CorsConfigurationSource corsConfigurationSource() {
     var c = new CorsConfiguration();
     // allow both localhost and 127.0.0.1 on any dev port
-    c.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
+    c.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*", "https://checkitup.netlify.app"));
     c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
     c.setAllowedHeaders(List.of("Content-Type","Authorization","X-Requested-With","Accept"));
     c.setAllowCredentials(true); // only if you send cookies/Authorization
