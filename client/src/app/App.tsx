@@ -14,15 +14,27 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-[var(--color-blush-200)] border-b p-4 flex justify-between items-center">
-        <h1 className="font-bold text-3xl">CheckIt</h1>
-        <nav className="flex gap-4">
-          {isLoggedIn ? (
+      {isLoggedIn ? (
+        <header className="bg-[var(--color-blush-200)] border-b p-4 flex justify-between items-center">
+          <h1 className="font-bold text-3xl">CheckIt</h1>
+          <nav className="flex gap-4">
             <div className="flex gap-4">
-              <NavLink to="/home" className="hover:underline">
+              <NavLink
+                style={{ fontSize: 20 }}
+                to="/home"
+                className="hover:underline"
+              >
                 Home
               </NavLink>
               <NavLink
+                style={{ fontSize: 20 }}
+                to="/profile"
+                className="hover:underline"
+              >
+                Profile
+              </NavLink>
+              <NavLink
+                style={{ fontSize: 20 }}
                 onClick={handleLogout}
                 to="/"
                 className="hover:underline"
@@ -30,9 +42,9 @@ export default function App() {
                 Logout
               </NavLink>
             </div>
-          ) : null}
-        </nav>
-      </header>
+          </nav>
+        </header>
+      ) : null}
 
       <main className="flex flex-col flex-1">
         <Outlet />

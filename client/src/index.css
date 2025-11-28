@@ -2,19 +2,21 @@
 
 @layer base {
   :root {
+    --color-beige-20: #fcf5ee;
     --color-blush-50: #fff2f2;
     --color-blush-100: #fbe2e2;
-    --color-blush-200: #ffc6c6;
-    --color-blush-300: #ff9999;
-    --color-blush-400: #ff8080;
+    --color-blush-200: #ffc4c4;
+    --color-blush-300: #ffc4c4;
+    --color-blush-400: #ee6983;
     --color-blush-500: #ff6666;
     --color-blush-600: #ff4d4d;
+    --color-blush-600: #ff4d4d;
+    --color-blush-900: #850e35;
     --color-text-red: #cb3c3c;
     --color-grayish: #333333;
   }
 }
 
-/* optional global styles */
 body {
   color: var(--color-grayish);
 }
