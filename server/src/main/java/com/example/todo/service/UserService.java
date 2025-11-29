@@ -106,4 +106,13 @@ public class UserService {
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         users.save(user);
     }
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        // get user
+        var user = users.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        users.delete(user);
+    }
 }

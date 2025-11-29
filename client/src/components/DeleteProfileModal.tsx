@@ -1,13 +1,22 @@
 import { Button, DialogTitle, ModalDialog } from "@mui/joy";
 import Modal from "@mui/joy/Modal";
 
+type DeleteProfileModalProps = {
+  open: boolean;
+  onClose: () => void;
+  onDeleteUser: () => void;
+};
+
 export function DeleteProfileModal({
   open,
   onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+  onDeleteUser,
+}: DeleteProfileModalProps) {
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    onDeleteUser();
+  }
+
   return (
     <Modal
       open={open}
@@ -36,6 +45,7 @@ export function DeleteProfileModal({
             "&:hover": { bgcolor: "#850E35" },
             width: 200,
           }}
+          onClick={handleSubmit}
         >
           Yes, I want to delete my profile and todo's
         </Button>

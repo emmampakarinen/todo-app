@@ -5,13 +5,17 @@ import { DeleteProfileModal } from "../components/DeleteProfileModal";
 import { EditUserInfo } from "../components/EditUserInfo";
 import { getCurrentUser } from "../shared/lib/auth";
 import type { User } from "../types/user";
-import { changePassword, updateUser } from "../shared/lib/user";
+import { changePassword, deleteUser, updateUser } from "../shared/lib/user";
 import { getToken, setAuth } from "../shared/lib/token";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/hooks/useAuth";
 
 export function ProfilePage() {
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
   const [openDeleteProfileModal, setopenDeleteProfileModal] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -38,6 +42,15 @@ export function ProfilePage() {
     console.log("Changing password...");
     const response = await changePassword(oldPassword, newPassword);
     console.log("Password change response:", response);
+  }
+
+  async function handleDeleteUser() {
+    console.log("Deleting user...");
+    const response = await deleteUser();
+
+    console.log("Deleted user response:", response);
+    logout();
+    navigate("/");
   }
 
   return (
@@ -84,6 +97,7 @@ export function ProfilePage() {
         <DeleteProfileModal
           open={openDeleteProfileModal}
           onClose={() => setopenDeleteProfileModal(false)}
+          onDeleteUser={handleDeleteUser}
         />
       </div>
     </>

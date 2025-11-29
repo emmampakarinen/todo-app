@@ -23,3 +23,9 @@ export const changePassword = async (
 
   return response.data;
 };
+
+export const deleteUser = async (): Promise<ApiResponse<string>> => {
+  const response = await api.delete<ApiResponse<string>>("/delete-user");
+
+  return response.data;
+};
