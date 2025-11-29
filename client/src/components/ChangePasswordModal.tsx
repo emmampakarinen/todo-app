@@ -2,6 +2,7 @@ import {
   Button,
   DialogTitle,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   ModalDialog,
@@ -10,15 +11,27 @@ import {
 import Modal from "@mui/joy/Modal";
 import { useState } from "react";
 
+type ChangePasswordModalProps = {
+  open: boolean;
+  onClose: () => void;
+  onChangePassword: (oldPassword: string, newPassword: string) => void;
+};
+
 export function ChangePasswordModal({
   open,
   onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+  onChangePassword,
+}: ChangePasswordModalProps) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const passwordsMatch = newPassword === confirmPassword;
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    onChangePassword(oldPassword, newPassword);
+  }
+
   return (
     <Modal
       open={open}
@@ -37,7 +50,7 @@ export function ChangePasswordModal({
         "
       >
         <DialogTitle>Change password</DialogTitle>
-        <form onSubmit={() => {}}>
+        <form onSubmit={handleSubmit}>
           <Stack spacing={2} alignContent={"center"} alignItems={"center"}>
             <FormControl>
               <FormLabel>Old password</FormLabel>
@@ -58,6 +71,18 @@ export function ChangePasswordModal({
                 required
                 type="password"
               />
+              <FormHelperText>Min. 8 characters</FormHelperText>
+            </FormControl>
+            <FormControl error={!passwordsMatch && confirmPassword.length > 0}>
+              <Input
+                placeholder="Re-enter new password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              {!passwordsMatch && confirmPassword.length > 0 && (
+                <FormHelperText>Password does not match</FormHelperText>
+              )}
             </FormControl>
             <Button
               type="submit"

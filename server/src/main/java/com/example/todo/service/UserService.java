@@ -91,4 +91,19 @@ public class UserService {
         return users.save(user);
     }
 
+    @Transactional
+    public void changePassword(String oldPassword, String newPassword, Long userId) {
+        // check credentials
+        var user = users.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // verify old password
+        if (!passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
+            throw new IllegalArgumentException("Old password does not match");
+        }
+
+        // update password
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        users.save(user);
+    }
 }

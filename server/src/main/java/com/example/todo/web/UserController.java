@@ -1,5 +1,6 @@
 package com.example.todo.web;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.todo.model.User;
 import com.example.todo.service.JwtService;
 import com.example.todo.service.UserService;
+import com.example.todo.web.dto.ApiResponse;
 import com.example.todo.web.dto.UpdateUserRequest;
 
 @RestController @RequestMapping("/api")
@@ -28,5 +30,16 @@ public class UserController {
         Long currentUserId = jwtService.userId(token);
 
         return service.updateUserInfo(currentUserId, body.email(), body.username());
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<ApiResponse<Void>> updateUserInfo(String oldPassword, String newPassword,
+        @RequestHeader("Authorization") String header) {
+        String token = header.substring(7);
+        Long currentUserId = jwtService.userId(token);
+
+        service.updateUserInfo(currentUserId, oldPassword, newPassword);
+        return ResponseEntity.ok(new ApiResponse<>("Password updated successfully"));
+
     }
 }
