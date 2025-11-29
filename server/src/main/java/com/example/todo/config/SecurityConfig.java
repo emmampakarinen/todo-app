@@ -1,20 +1,25 @@
 package com.example.todo.config;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.*;
 
 @Configuration
 public class SecurityConfig {
+
+  @Autowired
+  private Environment env;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -23,14 +28,24 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain security(HttpSecurity http) throws Exception {
+     boolean isDev = Arrays.asList(env.getActiveProfiles()).contains("dev");
     http
       .csrf(csrf -> csrf.disable())
       .cors(Customizer.withDefaults())
-      .authorizeHttpRequests(auth -> auth
+      .authorizeHttpRequests(auth -> {auth
         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight
         .requestMatchers("/", "/ping", "/api/auth/**").permitAll()
-        .anyRequest().permitAll() // keep open while building; lock down later
-      );
+        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll();
+
+        if (isDev) {
+          // allow all in dev for easier testing
+          auth.anyRequest().permitAll();
+        } else {
+          // secure all endpoints in prod
+          auth.anyRequest().authenticated();
+        }
+
+  });
     return http.build();
   }
 

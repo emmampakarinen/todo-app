@@ -7,7 +7,10 @@ export const updateUser = async (
   email: string,
   username: string
 ): Promise<User> => {
-  const response = await api.patch<User>("/update-user", { email, username });
+  const response = await api.patch<User>("/user/update-user", {
+    email,
+    username,
+  });
 
   return response.data;
 };
@@ -16,16 +19,19 @@ export const changePassword = async (
   oldPassword: string,
   newPassword: string
 ): Promise<ApiResponse<string>> => {
-  const response = await api.patch<ApiResponse<string>>("/change-password", {
-    oldPassword,
-    newPassword,
-  });
+  const response = await api.patch<ApiResponse<string>>(
+    "/user/change-password",
+    {
+      oldPassword,
+      newPassword,
+    }
+  );
 
   return response.data;
 };
 
 export const deleteUser = async (): Promise<ApiResponse<string>> => {
-  const response = await api.delete<ApiResponse<string>>("/delete-user");
+  const response = await api.delete<ApiResponse<string>>("/user/delete-user");
 
   return response.data;
 };

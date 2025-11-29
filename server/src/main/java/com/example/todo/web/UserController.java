@@ -14,7 +14,7 @@ import com.example.todo.service.UserService;
 import com.example.todo.web.dto.ApiResponse;
 import com.example.todo.web.dto.UpdateUserRequest;
 
-@RestController @RequestMapping("/api")
+@RestController @RequestMapping("/api/user")
 public class UserController {
     private final UserService service;
     private final JwtService jwtService;
