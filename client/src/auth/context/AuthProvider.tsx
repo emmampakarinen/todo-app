@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { currentUser, loginApi, logoutApi } from "../../shared/lib/auth";
+import { getCurrentUser, loginApi, logoutApi } from "../../shared/lib/auth";
 import type { LoginData } from "../../types/auth";
 import type { User } from "../../types/user";
 import { AuthContext } from "./auth-context";
@@ -10,7 +10,7 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<User | null>(() => currentUser());
+  const [user, setUser] = useState<User | null>(() => getCurrentUser());
 
   async function login(data: LoginData) {
     const u = await loginApi(data);

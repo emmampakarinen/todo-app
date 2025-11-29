@@ -1,5 +1,5 @@
 import { Button } from "@mui/joy";
-import { currentUser } from "../shared/lib/auth";
+import { getCurrentUser } from "../shared/lib/auth";
 import WeekSummary from "../components/WeekSummary";
 import { useEffect, useState } from "react";
 import NewListModal from "../components/NewListModal";
@@ -11,7 +11,7 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import type { Todo } from "../types/todo";
 
 export function HomePage() {
-  const user = currentUser();
+  const user = getCurrentUser();
   const [openTodoModal, setOpenTodoModal] = useState(false);
   const [openListModal, setOpenListModal] = useState(false);
   const [lists, setLists] = useState<List[]>([]);

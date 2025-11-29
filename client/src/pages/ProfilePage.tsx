@@ -1,35 +1,49 @@
-import { Button, FormControl, FormLabel, Input } from "@mui/joy";
+import { Button } from "@mui/joy";
 import { ChangePasswordModal } from "../components/ChangePasswordModal";
-import { useState } from "react";
-import { AvatarWithMenu } from "../components/AvatarWithMenu";
+import { useEffect, useState } from "react";
 import { DeleteProfileModal } from "../components/DeleteProfileModal";
+import { EditUserInfo } from "../components/EditUserInfo";
+import { getCurrentUser } from "../shared/lib/auth";
+import type { User } from "../types/user";
+import { updateUser } from "../shared/lib/user";
+import { getToken, setAuth } from "../shared/lib/token";
 
 export function ProfilePage() {
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
   const [openDeleteProfileModal, setopenDeleteProfileModal] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    setUser(user);
+    console.log(user);
+  }, [user?.email, user?.username]);
+
+  async function updateUserInfo(email: string, username: string) {
+    if (!user) return;
+    console.log("Updating user info to:", email, username);
+    const updatedUser = await updateUser(email, username);
+
+    console.log("Updated user:", updatedUser);
+    const token = getToken();
+    if (token) {
+      // Update user info in localStorage
+      setAuth(token, updatedUser);
+    }
+
+    setUser(updatedUser);
+  }
+
   return (
     <>
       <div className="flex-1 flex flex-col place-items-center p-4 mt-20 ">
         <h1 className="text-4xl font-bold mb-4 p-10">Profile Page</h1>
-        <div className="rounded-lg border-4 bg-[var(--color-blush-100)] border-[var(--color-blush-300)] items-center p-10 shadow-lg w-full max-w-md flex flex-col gap-4 ">
-          <h2 className="text-xl font-semibold">User Information</h2>
-          <div className="flex flex-col items-center gap-2">
-            <AvatarWithMenu></AvatarWithMenu>
-          </div>
+        {user ? (
+          <EditUserInfo user={user} onUpdate={updateUserInfo}></EditUserInfo>
+        ) : (
+          <p>Loading user information...</p>
+        )}
 
-          <FormControl>
-            <FormLabel>E-mail</FormLabel>
-            <Input placeholder="Placeholder" />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Username</FormLabel>
-            <Input placeholder="Placeholder" />
-          </FormControl>
-
-          <Button variant="solid" color="primary">
-            Update profile
-          </Button>
-        </div>
         <div className="mt-10 flex-col flex gap-4">
           <Button
             variant="solid"

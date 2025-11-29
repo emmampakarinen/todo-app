@@ -61,5 +61,34 @@ public class UserService {
 
         var userRes = new UserResponse(user.getId(), user.getEmail(), user.getUsername(), user.getCreatedAt());
         return new AuthResponse(token, userRes);
+    }
+
+    @Transactional
+    public User updateUserInfo(Long userId, String email, String username) {
+        var user = users.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // update email if provided and if not already taken and differs from current email
+        if (email != null && !email.isEmpty()) {
+            if (!email.equals(user.getEmail())) {
+                if (users.existsByEmail(email)) {
+                    throw new IllegalArgumentException("Email already in use");
+                }
+            }
+            user.setEmail(email);
         }
+
+        // same for username; update if provided and if not already taken and differs from current username
+        if (username != null && !username.isEmpty()) {
+            if (!username.equals(user.getUsername())) {
+                if (users.existsByUsername(username)) {
+                    throw new IllegalArgumentException("Username already in use");
+                }
+            user.setUsername(username);
+            }
+        }
+
+        return users.save(user);
+    }
+
 }
