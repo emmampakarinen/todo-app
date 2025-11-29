@@ -33,7 +33,7 @@ export function LoginPage() {
     <>
       {" "}
       <div className="flex flex-col flex-1 items-center justify-center">
-        <div className="flex flex-col justify-center items-center rounded-xl border-2 shadow-lg p-8 w-full max-w-md">
+        <div className="flex flex-col justify-center items-center rounded-lg border-4 bg-[var(--color-blush-100)] border-[var(--color-blush-300)] shadow-lg p-8 w-full max-w-md">
           <h1 className="mb-4 font-bold">Login</h1>
           <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
             <Input

@@ -13,7 +13,7 @@ export default function App() {
   const isLoggedIn = Boolean(user);
 
   return (
-    <div className="min-h-screen flex flex-col background-[var(--color-beige-50)]">
+    <div className="min-h-screen flex flex-col bg-[var(--color-beige-20)]">
       {isLoggedIn ? (
         <header className="bg-[var(--color-blush-200)] border-b p-4 flex justify-between items-center">
           <h1 className="font-bold text-3xl">CheckIt</h1>
