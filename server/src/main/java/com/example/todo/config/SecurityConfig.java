@@ -20,6 +20,9 @@ public class SecurityConfig {
 
   @Autowired
   private Environment env;
+  
+  @Autowired
+  private JwtAuthFilter jwtAuthFilter;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -28,7 +31,7 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain security(HttpSecurity http) throws Exception {
-     boolean isDev = Arrays.asList(env.getActiveProfiles()).contains("dev");
+    boolean isDev = Arrays.asList(env.getActiveProfiles()).contains("dev");
     http
       .csrf(csrf -> csrf.disable())
       .cors(Customizer.withDefaults())
@@ -45,7 +48,8 @@ public class SecurityConfig {
           auth.anyRequest().authenticated();
         }
 
-  });
+  })
+  .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class); // JWT filter
     return http.build();
   }
 
