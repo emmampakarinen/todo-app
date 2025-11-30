@@ -1,13 +1,13 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { Avatar, Button, Box } from "@mui/joy";
-import { uploadImage } from "../shared/lib/user";
+import { deleteImage, uploadImage } from "../shared/lib/user";
 import { getToken, setAuth } from "../shared/lib/token";
 
 export function AvatarWithMenu({ userImg }: { userImg?: string }) {
   const [open, setOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(userImg);
   const [uploading, setUploading] = useState(false);
-  console.log(userImg);
+  const [deleting, setDeleting] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -27,8 +27,8 @@ export function AvatarWithMenu({ userImg }: { userImg?: string }) {
     formData.append("file", file);
 
     const response = await uploadImage(formData);
-    console.log("Upload response:", response);
     setUploading(false);
+    console.log("Upload response:", response);
 
     if (response.status === "error") {
       // handle error
@@ -46,8 +46,26 @@ export function AvatarWithMenu({ userImg }: { userImg?: string }) {
     }
   };
 
-  const handleDelete = () => {
-    // TODO: delete avatar
+  const handleDelete = async () => {
+    setDeleting(true);
+    const response = await deleteImage();
+    setDeleting(false);
+    console.log("Delete response:", response);
+
+    if (response.status === "error") {
+      // handle error
+      alert(response.message);
+      return;
+    }
+
+    const updatedUser = response.data;
+    setPreviewUrl(updatedUser.profileImageUrl);
+
+    const token = getToken();
+    if (token) {
+      // Update user info in localStorage
+      setAuth(token, updatedUser);
+    }
   };
 
   return (
@@ -94,6 +112,7 @@ export function AvatarWithMenu({ userImg }: { userImg?: string }) {
                 variant="soft"
                 color="danger"
                 onClick={handleDelete}
+                loading={deleting}
               >
                 Delete
               </Button>

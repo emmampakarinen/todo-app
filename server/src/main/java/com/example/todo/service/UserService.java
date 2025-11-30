@@ -22,6 +22,12 @@ public class UserService {
         this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService;
     }
 
+    
+    public User getUser(Long userId) {
+        return users.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
     @Transactional
     public UserDTO register(RegisterRequest request) {
         if (users.existsByEmail(request.getEmail())) {
@@ -99,6 +105,16 @@ public class UserService {
         .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         user.setProfileImageUrl(imageUrl);
+        return users.save(user);
+    }
+
+    @Transactional
+    public User deleteUserImage(Long userId) {
+        // get user
+        var user = users.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        user.setProfileImageUrl(null);
         return users.save(user);
     }
 

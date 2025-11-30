@@ -64,6 +64,21 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>("Image uploaded successfully", userDto, "success"));
     }
 
+    @DeleteMapping("/delete-profile-image")
+    public ResponseEntity<ApiResponse<UserDTO>> deleteProfileImage(@RequestHeader("Authorization") String header) {
+        String token = header.substring(7);
+        Long currentUserId = jwtService.userId(token);
+
+        User user = userService.getUser(currentUserId);
+
+        profileImageService.deleteProfileImage(currentUserId, user.getProfileImageUrl());
+
+        user = userService.deleteUserImage(currentUserId);
+        UserDTO userDto = UserMapper.toDto(user);
+
+        return ResponseEntity.ok(new ApiResponse<>("Image deleted successfully", userDto, "success"));
+    }
+
     @PatchMapping("/change-password")
     public ResponseEntity<ApiResponse<Void>> updateUserInfo(String oldPassword, String newPassword,
         @RequestHeader("Authorization") String header) {

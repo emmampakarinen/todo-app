@@ -51,3 +51,11 @@ export const uploadImage = async (
 
   return response.data;
 };
+
+export const deleteImage = async (): Promise<ApiResponse<User>> => {
+  const response = await api.delete<ApiResponse<User>>(
+    "/user/delete-profile-image"
+  );
+
+  return response.data;
+};

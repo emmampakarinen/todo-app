@@ -1,5 +1,4 @@
 package com.example.todo.service;
-import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 
@@ -49,6 +48,14 @@ public class ProfileImageService {
 
         // If bucket is public or behind public CDN, this can be enough:
         return String.format("https://storage.googleapis.com/%s/%s", bucketName, objectName);
+    }
+
+    public void deleteProfileImage(Long userId, String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) return;
+
+        String objectName = imageUrl.substring(imageUrl.indexOf(bucketName) + bucketName.length() + 1);
+
+        storage.delete(bucketName, objectName);
     }
 
     private String getExtension(String filename) {

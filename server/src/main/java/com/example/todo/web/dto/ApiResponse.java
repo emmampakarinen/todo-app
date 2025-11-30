@@ -17,7 +17,7 @@ public class ApiResponse<T> {
         this.status = status;
     }
 
-    public ApiResponse(String message, T data, String Status) { // for responses with data
+    public ApiResponse(String message, T data, String status) { // for responses with data
         this.message = message;
         this.data = data;
         this.status = status;
