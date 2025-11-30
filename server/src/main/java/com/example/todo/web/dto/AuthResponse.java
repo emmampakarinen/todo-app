@@ -3,10 +3,10 @@ import lombok.Value;
 
 @Value
 public class AuthResponse {
-    private UserResponse user; 
+    private UserDTO user; 
     private String token;
 
-    public AuthResponse(String token, UserResponse user) {
+    public AuthResponse(String token, UserDTO user) {
         this.token = token; this.user = user; 
     }
 }

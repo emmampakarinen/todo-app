@@ -12,3 +12,6 @@ app:
   cors:
     origins: "*"
     # in prod we allow all origins, but restrict in SecurityConfig based on env
+
+gcs:
+  bucket-name: "todo-app-profile-images"

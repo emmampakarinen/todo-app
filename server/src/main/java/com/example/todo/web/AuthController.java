@@ -11,7 +11,7 @@ import com.example.todo.service.UserService;
 import com.example.todo.web.dto.AuthResponse;
 import com.example.todo.web.dto.LoginRequest;
 import com.example.todo.web.dto.RegisterRequest;
-import com.example.todo.web.dto.UserResponse;
+import com.example.todo.web.dto.UserDTO;
 
 import jakarta.validation.Valid;
 
@@ -26,9 +26,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody RegisterRequest request) {
 
-        UserResponse res = userService.register(request);
+        UserDTO res = userService.register(request);
         return ResponseEntity.ok(res);
     }
 

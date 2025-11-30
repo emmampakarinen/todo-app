@@ -24,7 +24,7 @@ export const logoutApi = async (): Promise<void> => {
 };
 
 // Get the currently authenticated user
-export const currentUser = (): User => {
+export const getCurrentUser = (): User => {
   const user = getUser();
   return user as User;
 };

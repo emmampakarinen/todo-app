@@ -34,6 +34,9 @@ public class User {
     @com.fasterxml.jackson.annotation.JsonIgnore
     private String passwordHash;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @Column(nullable = false) 
     @Builder.Default 
     private OffsetDateTime createdAt = OffsetDateTime.now();

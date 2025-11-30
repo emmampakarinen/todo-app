@@ -8,6 +8,7 @@ import { FrontPage } from "../pages/FrontPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import HomePage from "../pages/HomePage";
 import RequireGuest from "../auth/components/RequireGuest";
+import { ProfilePage } from "../pages/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +39,10 @@ export const router = createBrowserRouter([
       // Protected area
       {
         element: <RequireAuth />,
-        children: [{ path: "home", element: <HomePage /> }],
+        children: [
+          { path: "home", element: <HomePage /> },
+          { path: "profile", element: <ProfilePage /> },
+        ],
       },
 
       { path: "*", element: <NotFoundPage /> },
