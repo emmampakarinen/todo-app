@@ -8,7 +8,7 @@ import com.example.todo.repo.UserRepository;
 import com.example.todo.web.dto.AuthResponse;
 import com.example.todo.web.dto.LoginRequest;
 import com.example.todo.web.dto.RegisterRequest;
-import com.example.todo.web.dto.UserResponse;
+import com.example.todo.web.dto.UserDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -23,7 +23,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse register(RegisterRequest request) {
+    public UserDTO register(RegisterRequest request) {
         if (users.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
@@ -38,10 +38,11 @@ public class UserService {
             .build();
 
         var savedUser = users.save(user);
-        return new UserResponse(
+        return new UserDTO(
             savedUser.getId(),
             savedUser.getEmail(),
             savedUser.getUsername(),
+            savedUser.getProfileImageUrl(),
             savedUser.getCreatedAt()
         );
     }
@@ -59,7 +60,7 @@ public class UserService {
         // Generate JWT token
         var token = jwtService.generate(user.getUsername(), user.getId());
 
-        var userRes = new UserResponse(user.getId(), user.getEmail(), user.getUsername(), user.getCreatedAt());
+        var userRes = new UserDTO(user.getId(), user.getEmail(), user.getUsername(), user.getProfileImageUrl(), user.getCreatedAt());
         return new AuthResponse(token, userRes);
     }
 
@@ -88,6 +89,16 @@ public class UserService {
             }
         }
 
+        return users.save(user);
+    }
+
+    @Transactional
+    public User addUserImage(Long userId, String imageUrl) {
+        // get user
+        var user = users.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        user.setProfileImageUrl(imageUrl);
         return users.save(user);
     }
 

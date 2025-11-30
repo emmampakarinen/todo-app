@@ -11,6 +11,7 @@ type editUserInfoProps = {
 export function EditUserInfo({ user, onUpdate }: editUserInfoProps) {
   const [username, setUsername] = useState(user?.username);
   const [email, setEmail] = useState(user?.email);
+  console.log(user?.profileImageUrl);
 
   function onUpdateClick() {
     if (email && username) {
@@ -23,7 +24,7 @@ export function EditUserInfo({ user, onUpdate }: editUserInfoProps) {
     <div className="rounded-lg border-4 bg-[var(--color-blush-100)] border-[var(--color-blush-300)] items-center p-10 shadow-lg w-full max-w-md flex flex-col gap-4 ">
       <h2 className="text-xl font-semibold">User Information</h2>
       <div className="flex flex-col items-center gap-2">
-        <AvatarWithMenu></AvatarWithMenu>
+        <AvatarWithMenu userImg={user?.profileImageUrl}></AvatarWithMenu>
       </div>
 
       <FormControl>

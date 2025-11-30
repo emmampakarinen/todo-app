@@ -35,3 +35,19 @@ export const deleteUser = async (): Promise<ApiResponse<string>> => {
 
   return response.data;
 };
+
+export const uploadImage = async (
+  formData: FormData
+): Promise<ApiResponse<User>> => {
+  const response = await api.post<ApiResponse<User>>(
+    "/user/add-profile-image",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data;
+};

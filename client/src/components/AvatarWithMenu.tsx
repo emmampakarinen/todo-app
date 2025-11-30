@@ -1,11 +1,49 @@
-import { useState } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { Avatar, Button, Box } from "@mui/joy";
+import { uploadImage } from "../shared/lib/user";
+import { getToken, setAuth } from "../shared/lib/token";
 
-export function AvatarWithMenu() {
+export function AvatarWithMenu({ userImg }: { userImg?: string }) {
   const [open, setOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(userImg);
+  const [uploading, setUploading] = useState(false);
+  console.log(userImg);
 
-  const handleUpload = () => {
-    // TODO: open file picker
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const localUrl = URL.createObjectURL(file);
+    setPreviewUrl(localUrl);
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await uploadImage(formData);
+    console.log("Upload response:", response);
+    setUploading(false);
+
+    if (response.status === "error") {
+      // handle error
+      alert(response.message);
+      setPreviewUrl(userImg); // revert to previous image
+    }
+
+    const updatedUser = response.data;
+    setPreviewUrl(updatedUser.profileImageUrl);
+
+    const token = getToken();
+    if (token) {
+      // Update user info in localStorage
+      setAuth(token, updatedUser);
+    }
   };
 
   const handleDelete = () => {
@@ -19,8 +57,15 @@ export function AvatarWithMenu() {
       onMouseLeave={() => setOpen(false)}
     >
       <Box sx={{ position: "relative", display: "inline-block" }}>
-        <Avatar sx={{ width: 100, height: 100 }} />
+        <Avatar sx={{ width: 100, height: 100 }} src={previewUrl} />
 
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
         {open && (
           <Box
             sx={{
@@ -35,17 +80,24 @@ export function AvatarWithMenu() {
               borderRadius: "50%",
             }}
           >
-            <Button size="sm" variant="soft" onClick={handleUpload}>
-              Upload
-            </Button>
             <Button
               size="sm"
               variant="soft"
-              color="danger"
-              onClick={handleDelete}
+              onClick={handleUploadClick}
+              loading={uploading}
             >
-              Delete
+              Upload
             </Button>
+            {previewUrl ? (
+              <Button
+                size="sm"
+                variant="soft"
+                color="danger"
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            ) : null}
           </Box>
         )}
       </Box>
