@@ -2,6 +2,7 @@ import { Button, FormControl, FormHelperText, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerApi } from "../../shared/lib/auth";
+import { AppTitle } from "../../components/AppTitle";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -40,6 +41,7 @@ export function RegisterPage() {
     <>
       {" "}
       <div className="flex flex-col flex-1 items-center justify-center">
+        <AppTitle />
         <div className="rounded-lg border-4 bg-[var(--color-blush-100)] border-[var(--color-blush-300)] flex flex-col justify-center items-center shadow-lg p-8 w-full max-w-md">
           <h1 className="mb-4 font-bold text-2xl">Register</h1>
           <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -76,13 +78,29 @@ export function RegisterPage() {
               )}
             </FormControl>
             <div className="flex flex-1 mt-3 justify-center items-center">
-              <Button type="submit">Create account</Button>
+              <Button
+                sx={{
+                  bgcolor: "#AD1747",
+                  "&:hover": { bgcolor: "#850E35" },
+                }}
+                type="submit"
+              >
+                Create account
+              </Button>
             </div>
           </form>
         </div>
         <div className="flex flex-col items-center justify-center mt-12 gap-1">
           <h1>Already have an account?</h1>
-          <Button variant="outlined" component={Link} to="/login">
+          <Button
+            variant="solid"
+            sx={{
+              bgcolor: "#EE6983",
+              "&:hover": { bgcolor: "#B54E62" },
+            }}
+            component={Link}
+            to="/login"
+          >
             Log back in
           </Button>
         </div>

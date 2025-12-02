@@ -46,7 +46,14 @@ export function EditUserInfo({ user, onUpdate }: editUserInfoProps) {
         />
       </FormControl>
 
-      <Button onClick={onUpdateClick} variant="solid" color="primary">
+      <Button
+        onClick={onUpdateClick}
+        sx={{
+          bgcolor: "#AD1747",
+          "&:hover": { bgcolor: "#850E35" },
+        }}
+        color="primary"
+      >
         Update profile
       </Button>
     </div>
