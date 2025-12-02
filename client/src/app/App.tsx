@@ -7,7 +7,7 @@ export default function App() {
 
   const handleLogout = () => {
     logout();
-    navigate("/frontpage", { replace: true });
+    navigate("/", { replace: true }); // ???
   };
 
   const isLoggedIn = Boolean(user);

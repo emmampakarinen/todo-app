@@ -2,6 +2,7 @@ import { Button, Input } from "@mui/joy";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { AppTitle } from "../../components/AppTitle";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
@@ -31,8 +32,8 @@ export function LoginPage() {
 
   return (
     <>
-      {" "}
       <div className="flex flex-col flex-1 items-center justify-center">
+        <AppTitle />
         <div className="flex flex-col justify-center items-center rounded-lg border-4 bg-[var(--color-blush-100)] border-[var(--color-blush-300)] shadow-lg p-8 w-full max-w-md">
           <h1 className="mb-4 font-bold">Login</h1>
           <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -50,13 +51,30 @@ export function LoginPage() {
             ></Input>
 
             <div className="flex flex-1 mt-3 justify-center items-center">
-              <Button type="submit">Login</Button>
+              <Button
+                variant="solid"
+                sx={{
+                  bgcolor: "#AD1747",
+                  "&:hover": { bgcolor: "#850E35" },
+                }}
+                type="submit"
+              >
+                Login
+              </Button>
             </div>
           </form>
         </div>
         <div className="flex flex-col items-center justify-center mt-12 gap-1">
           <h1>Don't have an account yet?</h1>
-          <Button variant="outlined" component={Link} to="/register">
+          <Button
+            variant="solid"
+            sx={{
+              bgcolor: "#EE6983",
+              "&:hover": { bgcolor: "#B54E62" },
+            }}
+            component={Link}
+            to="/register"
+          >
             Create an account
           </Button>
         </div>

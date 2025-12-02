@@ -4,11 +4,11 @@ import RequireAuth from "../auth/components/RequireAuth";
 
 import { LoginPage } from "../auth/pages/LoginPage";
 import { RegisterPage } from "../auth/pages/RegisterPage";
-import { FrontPage } from "../pages/FrontPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import HomePage from "../pages/HomePage";
 import RequireGuest from "../auth/components/RequireGuest";
 import { ProfilePage } from "../pages/ProfilePage";
+import { LandingPage } from "../pages/LandingPage";
 
 export const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       // Public landing
-      { index: true, element: <FrontPage /> },
+      { index: true, element: <LandingPage /> },
 
       // Guests only (if logged in push to /home)
       {
