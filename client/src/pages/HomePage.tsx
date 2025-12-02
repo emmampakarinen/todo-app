@@ -1,5 +1,4 @@
 import { Button } from "@mui/joy";
-import { getCurrentUser } from "../shared/lib/auth";
 import WeekSummary from "../components/WeekSummary";
 import { useEffect, useState } from "react";
 import NewListModal from "../components/NewListModal";
@@ -11,7 +10,6 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import type { Todo } from "../types/todo";
 
 export function HomePage() {
-  const user = getCurrentUser();
   const [openTodoModal, setOpenTodoModal] = useState(false);
   const [openListModal, setOpenListModal] = useState(false);
   const [lists, setLists] = useState<List[]>([]);
@@ -61,13 +59,11 @@ export function HomePage() {
 
   return (
     <>
-      <div className="flex flex-col items-stretch gap-2 p-5">
-        <h2 className="text-3xl">Week {dayjs().week()}</h2>
-        <h3 className="font-sans text-2xl font-extrabold">
-          Welcome back {user.username}!
-        </h3>
-      </div>
-      <div className="flex flex-col items-stretch gap-5 p-5">
+      <div className="flex flex-col gap-5 p-5">
+        <div className="flex flex-col gap-2 justify-center items-center">
+          <h2 className="text-3xl">Week {dayjs().week()}</h2>
+        </div>
+
         <div className="flex-1 min-w-0">
           <WeekSummary
             lists={lists}
@@ -77,10 +73,30 @@ export function HomePage() {
         </div>
 
         <div className="flex flex-row justify-evenly gap-4">
-          <Button onClick={() => setOpenListModal(true)}>New list</Button>
-          <Button onClick={() => setOpenTodoModal(true)}>New task</Button>
+          <Button
+            sx={{
+              bgcolor: "#AD1747",
+              "&:hover": { bgcolor: "#850E35" },
+            }}
+            onClick={() => setOpenListModal(true)}
+          >
+            New list
+          </Button>
+
+          {lists.length !== 0 && (
+            <Button
+              sx={{
+                bgcolor: "#AD1747",
+                "&:hover": { bgcolor: "#850E35" },
+              }}
+              onClick={() => setOpenTodoModal(true)}
+            >
+              New task
+            </Button>
+          )}
         </div>
       </div>
+
       <NewListModal
         open={openListModal}
         onClose={() => setOpenListModal(false)}

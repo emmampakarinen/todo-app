@@ -55,8 +55,7 @@ export function ProfilePage() {
 
   return (
     <>
-      <div className="flex-1 flex flex-col place-items-center p-4 mt-20 ">
-        <h1 className="text-4xl font-bold mb-4 p-10">Profile Page</h1>
+      <div className="flex-1 flex flex-col place-items-center p-10 align-items-center">
         {user ? (
           <EditUserInfo
             user={user}

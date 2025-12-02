@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/hooks/useAuth";
+import { LogOut, ListChecks, User } from "lucide-react";
 
 export default function App() {
   const navigate = useNavigate();
@@ -7,7 +8,7 @@ export default function App() {
 
   const handleLogout = () => {
     logout();
-    navigate("/", { replace: true }); // ???
+    navigate("/", { replace: true });
   };
 
   const isLoggedIn = Boolean(user);
@@ -16,7 +17,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-[var(--color-beige-20)]">
       {isLoggedIn ? (
         <header className="bg-[var(--color-blush-200)] border-b p-4 flex justify-between items-center">
-          <h1 className="font-bold text-3xl">CheckIt</h1>
+          <h1 className="font-bold text-3xl">checkit</h1>
           <nav className="flex gap-4">
             <div className="flex gap-4">
               <NavLink
@@ -24,22 +25,22 @@ export default function App() {
                 to="/home"
                 className="hover:underline"
               >
-                Home
+                <ListChecks size={26} />
               </NavLink>
               <NavLink
                 style={{ fontSize: 20 }}
                 to="/profile"
                 className="hover:underline"
               >
-                Profile
+                <User size={26} />
               </NavLink>
               <NavLink
                 style={{ fontSize: 20 }}
                 onClick={handleLogout}
                 to="/"
-                className="hover:underline"
+                className="hover:underline flex items-center gap-2"
               >
-                Logout
+                <LogOut size={26} />
               </NavLink>
             </div>
           </nav>
