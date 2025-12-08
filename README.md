@@ -5,13 +5,14 @@ Built with **React + TypeScript + Vite**, **Java Spring Boot**, and **PostgreSQL
 
 **Frontend:** Netlify  
 **Backend:** Google Cloud Run  
-**Database:** Neon PostgreSQL  
+**Database:** Neon PostgreSQL
 
 ---
 
 ## Features
 
 ### Frontend (React + TypeScript + Vite)
+
 - Register & login
 - Create weekly to-do lists
 - Add, edit, toggle, and delete tasks
@@ -19,6 +20,7 @@ Built with **React + TypeScript + Vite**, **Java Spring Boot**, and **PostgreSQL
 - React Router for navigation
 
 ### Backend (Java Spring Boot)
+
 - JWT-based authentication
 - CRUD endpoints for users, lists, and todos
 - PostgreSQL integration
@@ -26,6 +28,7 @@ Built with **React + TypeScript + Vite**, **Java Spring Boot**, and **PostgreSQL
 - Deployed on Google Cloud Run
 
 ### Database (PostgreSQL)
+
 - Hosted on Neon
 - Serverless + connection pooling
 - Automatically created schema
@@ -34,14 +37,14 @@ Built with **React + TypeScript + Vite**, **Java Spring Boot**, and **PostgreSQL
 
 ## Tech Stack
 
-| Layer        | Technology |
-|--------------|------------|
-| Frontend     | React, TypeScript, Vite, MUI Joy, Tailwind |
-| Backend      | Spring Boot (Java 17), Spring Security, JWT |
-| Database     | PostgreSQL (Neon) |
-| Hosting      | Netlify (frontend), Cloud Run (backend) |
-| Local Dev    | Docker Compose |
-| Tooling      | pgAdmin, Docker, Maven |
+| Layer     | Technology                                  |
+| --------- | ------------------------------------------- |
+| Frontend  | React, TypeScript, Vite, MUI Joy, Tailwind  |
+| Backend   | Spring Boot (Java 17), Spring Security, JWT |
+| Database  | PostgreSQL (Neon)                           |
+| Hosting   | Netlify (frontend), Cloud Run (backend)     |
+| Local Dev | Docker Compose                              |
+| Tooling   | pgAdmin, Docker, Maven                      |
 
 ---
 
@@ -55,32 +58,47 @@ cd todo-app
 ```
 
 ### 2. Environment variables
-`client/.env.local`
+
+`client/.env`
+
 ```bash
 VITE_API_URL=http://localhost:8080/api
 ```
-`server/.env` 
+
+`infra/.env`
+
 ```bash
-PG_USER=postgres
-PG_PASSWORD=postgres
-PG_DB=todoapp
-JWT_SECRET=mysecret
+PG_USER=todo_user
+PG_PASSWORD=todo_pass
+PG_DB=todo_db
+PG_PORT=5433
+
+PGADMIN_DEFAULT_EMAIL=admin@local.com
+PGADMIN_DEFAULT_PASSWORD=supersecret
+PGADMIN_PORT=5050
+
+JWT_SECRET=your-jwt-secret-here-min-32-char
+GOOGLE_APPLICATION_CREDENTIALS=add-google-app-credentials
 ```
 
 `infra/.env`  
 Before running the local development stack, create a `.env` file.  
 Use the example template:
+
 ```bash
 cp .env.example .env
 ```
-Fill in your own values. The `.env.example` file shows all required variables without exposing secrets.
+
+Fill in your own values. The `.env.example` file shows all required variables without exposing secrets. The `GOOGLE_APPLICATION_CREDENTIALS` can be left empty (profile images cannot be uploaded/added when its empty)
 
 ### 3. Start the local development stack
+
 ```bash
 docker compose -f docker-compose.dev.yaml up --build
 ```
 
 This starts:
+
 - PostgreSQL
 - Spring Boot backend
 - React frontend
@@ -95,10 +113,12 @@ pgAdmin → http://localhost:5050
 # API Endpoints
 
 ## Authentication
-- POST /api/auth/register  
+
+- POST /api/auth/register
 - POST /api/auth/login
 
-## User handling 
+## User handling
+
 - POST /api/user/add-profile-image
 - PATCH /api/user
 - PATCH /api/user/update-user
@@ -107,31 +127,32 @@ pgAdmin → http://localhost:5050
 - DELETE /api/user/delete-profile-image
 
 ## Todos
+
 - GET /api/todos
 - GET /api/lists/{id}/todos
 - PATCH /api/todos/{id}/edit
-- PATCH /api/todos/{id}/done/{done}  
-- DELETE /api/todos/{id}  
+- PATCH /api/todos/{id}/done/{done}
+- DELETE /api/todos/{id}
 
 ## Lists
-- GET /api/lists  
-- POST /api/lists  
-- DELETE /api/list/{id}  
+
+- GET /api/lists
+- POST /api/lists
+- DELETE /api/list/{id}
 
 ---
 
 # Future Improvements
 
-- Reordering tasks  
-- Analytics & progress charts  
-- Shared lists between users  
-- Email-based password reset  
-- Dark mode  
-- Unit & integration tests  
+- Reordering tasks
+- Analytics & progress charts
+- Shared lists between users
+- Email-based password reset
+- Dark mode
+- Unit & integration tests
 
 ---
 
 # Author
 
-**Emma Pakarinen**  
-
+**Emma Pakarinen**
