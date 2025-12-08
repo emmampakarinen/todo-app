@@ -96,18 +96,27 @@ pgAdmin → http://localhost:5050
 
 ## Authentication
 - POST /api/auth/register  
-- POST /api/auth/login  
+- POST /api/auth/login
+
+## User handling 
+- POST /api/user/add-profile-image
+- PATCH /api/user
+- PATCH /api/user/update-user
+- PATCH /api/user/change-password
+- DELETE /api/user/delete-user
+- DELETE /api/user/delete-profile-image
 
 ## Todos
-- GET /api/todos  
-- POST /api/todos  
+- GET /api/todos
+- GET /api/lists/{id}/todos
+- PATCH /api/todos/{id}/edit
 - PATCH /api/todos/{id}/done/{done}  
 - DELETE /api/todos/{id}  
 
 ## Lists
 - GET /api/lists  
 - POST /api/lists  
-- DELETE /api/lists/{id}  
+- DELETE /api/list/{id}  
 
 ---
 
