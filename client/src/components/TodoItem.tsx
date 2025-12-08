@@ -1,7 +1,7 @@
 import { Checkbox, FormControl, FormHelperText, IconButton } from "@mui/joy";
 import type { Todo } from "../types/todo";
 import { useState } from "react";
-import { deleteTodoApi, toggleTodoDoneApi } from "../shared/lib/todo";
+import { deleteTodoApi } from "../shared/lib/todo";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import dayjs from "dayjs";
@@ -10,27 +10,21 @@ function TodoItem({
   todo,
   onDeleted,
   onEdit,
+  onToggle,
 }: {
   todo: Todo;
   onDeleted: (id: number) => void;
   onEdit: (todo: Todo) => void;
+  onToggle: (id: number, done: boolean) => void;
 }) {
-  const [done, setDone] = useState(todo.done);
   const [deleting, setDeleting] = useState(false);
 
   const isOverdue =
-    todo.dueAt && dayjs(todo.dueAt).isBefore(dayjs(), "day") && !done;
+    todo.dueAt && dayjs(todo.dueAt).isBefore(dayjs(), "day") && !todo.done;
 
-  // Toggle the done status of the todo item
-  const handleToggle = async () => {
-    const newDone = !done;
-    setDone(newDone);
-    try {
-      await toggleTodoDoneApi(todo.id, newDone);
-    } catch (err) {
-      console.error("Failed to toggle todo:", err);
-      setDone(!newDone); // reverting if request failed
-    }
+  const handleToggle = () => {
+    const newDone = !todo.done;
+    onToggle(todo.id, newDone);
   };
 
   // Delete the todo item
@@ -54,7 +48,7 @@ function TodoItem({
           : "bg-[var(--color-blush-200)] border border-transparent"
       }
       ${
-        done
+        todo.done
           ? "opacity-50 grayscale bg-[var(--color-blush-100)]"
           : "bg-[var(--color-blush-200)]"
       }`}
@@ -75,7 +69,11 @@ function TodoItem({
               </span>
             )}
           </div>
-          <Checkbox label={todo.title} checked={done} onChange={handleToggle} />
+          <Checkbox
+            label={todo.title}
+            checked={todo.done}
+            onChange={handleToggle}
+          />
           <FormHelperText>
             {todo.description && <span>{todo.description}</span>}
           </FormHelperText>

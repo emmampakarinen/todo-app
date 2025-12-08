@@ -3,9 +3,10 @@ import type { List } from "../types/list";
 import EditTodoModal from "./EditTodoModal";
 import TodoItem from "./TodoItem";
 import type { Todo } from "../types/todo";
-import { IconButton } from "@mui/joy";
+import { IconButton, Checkbox, Select, Option, FormControl } from "@mui/joy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteListApi } from "../shared/lib/lists";
+import { toggleTodoDoneApi } from "../shared/lib/todo";
 
 function TodoList({
   lists,
@@ -18,6 +19,8 @@ function TodoList({
 }) {
   const [editingTodo, setEditing] = useState<Todo | null>(null);
   const [data, setData] = useState<List[]>(lists);
+  const [selectedListId, setSelectedListId] = useState<number | "all">("all");
+  const [showCompleted, setShowCompleted] = useState(true);
 
   useEffect(() => setData(lists), [lists]);
 
@@ -63,9 +66,65 @@ function TodoList({
     }
   };
 
+  // Toggle the done status of the todo item
+  const handleTodoToggle = async (
+    listId: number,
+    todoId: number,
+    done: boolean
+  ) => {
+    try {
+      await toggleTodoDoneApi(todoId, done);
+      setData((prev) =>
+        prev.map((l) =>
+          l.id === listId
+            ? {
+                ...l,
+                todos: (l.todos ?? []).map((t) =>
+                  t.id === todoId ? { ...t, done } : t
+                ),
+              }
+            : l
+        )
+      );
+    } catch (err) {
+      console.error("Failed to toggle todo:", err);
+    }
+  };
+
+  const visibleLists = data.filter((l) =>
+    selectedListId === "all" ? true : l.id === selectedListId
+  );
+
   return (
-    <div className="flex flex-1 flex-col items-center justify-center">
-      {data.map((list) => (
+    <div className="flex flex-1 flex-col items-center justify-center w-full">
+      <div className="flex w-full max-w-4xl mb-4 gap-4 items-center">
+        <FormControl size="sm" className="flex-1">
+          <Select
+            value={selectedListId === "all" ? "all" : String(selectedListId)}
+            onChange={(_, value) => {
+              if (!value) return;
+              setSelectedListId(value === "all" ? "all" : Number(value));
+            }}
+          >
+            <Option value="all">All lists</Option>
+            {data.map((list) => (
+              <Option key={list.id} value={String(list.id)}>
+                {list.name}
+              </Option>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl size="sm">
+          <Checkbox
+            label="Show completed todos"
+            checked={showCompleted}
+            onChange={(e) => setShowCompleted(e.target.checked)}
+          />
+        </FormControl>
+      </div>
+
+      {visibleLists.map((list) => (
         <div
           key={list.id}
           className="border-4 bg-[var(--color-blush-50)] border-white rounded-lg p-3 w-full mb-4"
@@ -88,14 +147,17 @@ function TodoList({
 
           <div className="flex flex-col gap-2 mt-2">
             {(list.todos?.length ?? 0) > 0 ? (
-              list.todos!.map((todo) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  onDeleted={(todoId) => handleTodoDeleted(list.id, todoId)}
-                  onEdit={(t) => setEditing(t)}
-                />
-              ))
+              (list.todos ?? [])
+                .filter((todo) => (showCompleted ? true : !todo.done))
+                .map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onDeleted={(todoId) => handleTodoDeleted(list.id, todoId)}
+                    onEdit={(t) => setEditing(t)}
+                    onToggle={(id, done) => handleTodoToggle(list.id, id, done)}
+                  />
+                ))
             ) : (
               <p className="text-sm text-gray-500 italic">
                 No todos in this list.
@@ -104,17 +166,19 @@ function TodoList({
           </div>
         </div>
       ))}
-      {data.length === 0 && <p>No todo lists available.</p>}
+
+      {visibleLists.length === 0 && <p>No todo lists available.</p>}
+
       {editingTodo && (
         <EditTodoModal
           open
           onClose={() => setEditing(null)}
           todo={editingTodo}
           listName={
-            data.find((l) => l.id === editingTodo.todoListId)?.name ?? "—" // get list name
+            data.find((l) => l.id === editingTodo.todoListId)?.name ?? "—"
           }
           onSaved={(updated) => {
-            handleTodoEdited(updated); // updates UI immediately
+            handleTodoEdited(updated);
             setEditing(null);
           }}
         />
