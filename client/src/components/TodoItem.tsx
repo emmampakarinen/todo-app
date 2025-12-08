@@ -77,6 +77,10 @@ function TodoItem({
           <FormHelperText>
             {todo.description && <span>{todo.description}</span>}
           </FormHelperText>
+
+          <FormHelperText sx={{ fontSize: "0.65rem", opacity: 0.7 }}>
+            Created {dayjs(todo.createdAt).format("YYYY-MM-DD")}
+          </FormHelperText>
         </FormControl>
       </div>
       <div className="flex flex-col gap-2 mt-1">

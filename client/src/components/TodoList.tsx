@@ -3,10 +3,25 @@ import type { List } from "../types/list";
 import EditTodoModal from "./EditTodoModal";
 import TodoItem from "./TodoItem";
 import type { Todo } from "../types/todo";
-import { IconButton, Checkbox, Select, Option, FormControl } from "@mui/joy";
+import {
+  IconButton,
+  Checkbox,
+  Select,
+  Option,
+  FormControl,
+  FormLabel,
+} from "@mui/joy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteListApi } from "../shared/lib/lists";
 import { toggleTodoDoneApi } from "../shared/lib/todo";
+import { sortTodos } from "../shared/utils/sortTodos";
+
+type TodoSort =
+  | "position"
+  | "due-asc"
+  | "due-desc"
+  | "created-newest"
+  | "created-oldest";
 
 function TodoList({
   lists,
@@ -21,6 +36,7 @@ function TodoList({
   const [data, setData] = useState<List[]>(lists);
   const [selectedListId, setSelectedListId] = useState<number | "all">("all");
   const [showCompleted, setShowCompleted] = useState(true);
+  const [sortBy, setSortBy] = useState<TodoSort>("position");
 
   useEffect(() => setData(lists), [lists]);
 
@@ -97,8 +113,38 @@ function TodoList({
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center w-full">
-      <div className="flex w-full max-w-4xl mb-4 gap-4 items-center">
-        <FormControl size="sm" className="flex-1">
+      <div className="w-full max-w-4xl mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <FormControl size="sm" className="min-w-[200px]">
+            <FormLabel>Sort todos by</FormLabel>
+            <Select
+              value={sortBy}
+              onChange={(_, value) => {
+                if (!value) return;
+                setSortBy(value as TodoSort);
+              }}
+            >
+              <Option value="position">Position</Option>
+              <Option value="due-asc">Due date (earliest first)</Option>
+              <Option value="due-desc">Due date (latest first)</Option>
+              <Option value="created-newest">Created (newest first)</Option>
+              <Option value="created-oldest">Created (oldest first)</Option>
+            </Select>
+          </FormControl>
+
+          <FormControl size="sm" orientation="horizontal">
+            <div className="flex items-center gap-2 sm:mt-5">
+              <Checkbox
+                checked={showCompleted}
+                onChange={(e) => setShowCompleted(e.target.checked)}
+                label="Show completed todos"
+              />
+            </div>
+          </FormControl>
+        </div>
+
+        <FormControl size="sm" className="w-full sm:w-48">
+          <FormLabel>List</FormLabel>
           <Select
             value={selectedListId === "all" ? "all" : String(selectedListId)}
             onChange={(_, value) => {
@@ -113,14 +159,6 @@ function TodoList({
               </Option>
             ))}
           </Select>
-        </FormControl>
-
-        <FormControl size="sm">
-          <Checkbox
-            label="Show completed todos"
-            checked={showCompleted}
-            onChange={(e) => setShowCompleted(e.target.checked)}
-          />
         </FormControl>
       </div>
 
@@ -147,17 +185,20 @@ function TodoList({
 
           <div className="flex flex-col gap-2 mt-2">
             {(list.todos?.length ?? 0) > 0 ? (
-              (list.todos ?? [])
-                .filter((todo) => (showCompleted ? true : !todo.done))
-                .map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onDeleted={(todoId) => handleTodoDeleted(list.id, todoId)}
-                    onEdit={(t) => setEditing(t)}
-                    onToggle={(id, done) => handleTodoToggle(list.id, id, done)}
-                  />
-                ))
+              sortTodos(
+                (list.todos ?? []).filter((todo) =>
+                  showCompleted ? true : !todo.done
+                ),
+                sortBy
+              ).map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onDeleted={(todoId) => handleTodoDeleted(list.id, todoId)}
+                  onEdit={(t) => setEditing(t)}
+                  onToggle={(id, done) => handleTodoToggle(list.id, id, done)}
+                />
+              ))
             ) : (
               <p className="text-sm text-gray-500 italic">
                 No todos in this list.
