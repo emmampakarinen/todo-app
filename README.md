@@ -110,7 +110,7 @@ pgAdmin → http://localhost:5050
 
 ---
 
-# API Endpoints
+## API Endpoints
 
 The backend exposes a REST API documented with Swagger/OpenAPI.  
 The full, up-to-date list of endpoints can be viewed in Swagger UI at:
@@ -143,7 +143,7 @@ The main endpoint groups are:
 
 ---
 
-# Future Improvements
+## Future Improvements
 
 - Reordering tasks
 - Analytics & progress charts
@@ -154,6 +154,6 @@ The main endpoint groups are:
 
 ---
 
-# Author
+## Author
 
 **Emma Pakarinen**
