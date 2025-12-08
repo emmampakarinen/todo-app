@@ -112,33 +112,34 @@ pgAdmin → http://localhost:5050
 
 # API Endpoints
 
-## Authentication
+The backend exposes a REST API documented with Swagger/OpenAPI.  
+The full, up-to-date list of endpoints can be viewed in Swagger UI at:
 
-- POST /api/auth/register
-- POST /api/auth/login
+- Local: http://localhost:8080/swagger-ui/index.html
 
-## User handling
+The main endpoint groups are:
 
-- POST /api/user/add-profile-image
-- PATCH /api/user
-- PATCH /api/user/update-user
-- PATCH /api/user/change-password
-- DELETE /api/user/delete-user
-- DELETE /api/user/delete-profile-image
-
-## Todos
-
-- GET /api/todos
-- GET /api/lists/{id}/todos
-- PATCH /api/todos/{id}/edit
-- PATCH /api/todos/{id}/done/{done}
-- DELETE /api/todos/{id}
-
-## Lists
-
-- GET /api/lists
-- POST /api/lists
-- DELETE /api/list/{id}
+- **auth-controller**
+  - `POST /api/auth/register`
+  - `POST /api/auth/login`
+- **user-controller**
+  - `PATCH /api/user`
+  - `PATCH /api/user/update-user`
+  - `PATCH /api/user/change-password`
+  - `DELETE /api/user/delete-user`
+  - `DELETE /api/user/delete-profile-image`
+- **todo-list-controller**
+  - `POST /api/todos`
+  - `GET /api/lists`
+  - `POST /api/lists`
+  - `PATCH /api/todos/{id}/edit`
+  - `PATCH /api/todos/{id}/done/{done}`
+  - `GET /api/weeks/{monday}/todos`
+  - `GET /api/lists/{id}/todos`
+  - `DELETE /api/todos/{id}`
+  - `DELETE /api/list/{id}`
+- **health-controller**
+  - `GET /api/health`
 
 ---
 
