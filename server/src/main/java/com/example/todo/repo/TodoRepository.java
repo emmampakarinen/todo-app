@@ -15,4 +15,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     // count how many todos are in a specific list
     long countByTodoList_Id(Long listId);
+
+    List<Todo> findByDoneFalseAndReminderSentFalseAndDueDate(
+        LocalDate dueDate
+    );
 }

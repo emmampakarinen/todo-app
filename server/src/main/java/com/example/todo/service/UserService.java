@@ -37,13 +37,38 @@ public class UserService {
             throw new IllegalArgumentException("Username already in use");
         }
 
+        // creating new user
         User user = User.builder()
             .email(request.getEmail())
             .username(request.getUsername())
             .passwordHash(passwordEncoder.encode(request.getPassword()))
             .build();
+        user.setEmailVerified(false);
+
+        // token for verifying the user e-mail
+        String token = UUID.randomUUID().toString();
+        user.setVerificationToken(token);
+        user.setVerificationTokenExpiresAt(
+                Instant.now().plus(1, ChronoUnit.DAYS)
+        );
 
         var savedUser = users.save(user);
+
+        String verifyUrl = frontendUrl + "/verify-email?token=" + token;
+
+        String body = """
+                Hi!
+
+                Thanks for registering. Please confirm your email by clicking the link below:
+
+                %s
+
+                If you didn't create an account, you can ignore this email.
+                """.formatted(verifyUrl);
+
+        emailService.sendEmail(email, "Confirm your email", body);
+
+        
         return new UserDTO(
             savedUser.getId(),
             savedUser.getEmail(),

@@ -24,6 +24,9 @@ public class Todo {
     @ManyToOne(optional=false) @JoinColumn(name="list_id", nullable = false)
     private TodoList todoList;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
     // expose the todoListId in the JSON representation
     @JsonProperty("todoListId")
     public Long getTodoListId() { return todoList != null ? todoList.getId() : null; }
@@ -36,6 +39,9 @@ public class Todo {
 
     @Column(nullable = false)
     private boolean done = false;
+
+    @Column(nullable = false)
+    private boolean reminderSent;
 
     @Column(nullable = false)
     private Integer position = 0;
