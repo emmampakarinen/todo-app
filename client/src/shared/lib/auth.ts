@@ -1,7 +1,8 @@
 import { clearAuth, getUser, setAuth } from "./token";
-import type { AuthResponse, LoginData, RegisterData } from "../../types/auth";
+import type { LoginData, RegisterData } from "../../types/auth";
 import type { User } from "../../types/user";
 import { api } from "../api/api";
+import type { ApiResponse, AuthPayload } from "../../types/apiresponse";
 
 // Register a new user
 export const registerApi = async (data: RegisterData): Promise<User> => {
@@ -12,8 +13,12 @@ export const registerApi = async (data: RegisterData): Promise<User> => {
 // Login an existing user
 export const loginApi = async (data: LoginData): Promise<User> => {
   // return token and user info
-  const response = await api.post<AuthResponse>("/auth/login", data);
-  const { token, user } = response.data;
+  const response = await api.post<ApiResponse<AuthPayload>>(
+    "/auth/login",
+    data
+  );
+
+  const { token, user } = response.data.data;
   setAuth(token, user); // store in localStorage
   return user;
 };

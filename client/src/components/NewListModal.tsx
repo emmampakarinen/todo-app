@@ -84,7 +84,15 @@ function NewListModal({
                 onChange={(e) => setListDescription(e.target.value)}
               />
             </FormControl>
-            <Button type="submit">Submit</Button>
+            <Button
+              sx={{
+                bgcolor: "#AD1747",
+                "&:hover": { bgcolor: "#850E35" },
+              }}
+              type="submit"
+            >
+              Submit
+            </Button>
           </Stack>
         </form>
       </ModalDialog>

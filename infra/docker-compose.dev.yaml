@@ -41,6 +41,9 @@ services:
       APP_CORS_ORIGINS: "http://localhost:5173,http://frontend"
       JWT_SECRET: ${JWT_SECRET}
       GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      BE_URL_PROD: ${BE_URL_PROD}
     ports:
       - "8080:8080"
     depends_on:

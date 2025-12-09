@@ -11,7 +11,6 @@ type editUserInfoProps = {
 export function EditUserInfo({ user, onUpdate }: editUserInfoProps) {
   const [username, setUsername] = useState(user?.username);
   const [email, setEmail] = useState(user?.email);
-  console.log(user?.profileImageUrl);
 
   function onUpdateClick() {
     if (email && username) {

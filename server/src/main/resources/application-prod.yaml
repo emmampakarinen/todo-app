@@ -8,10 +8,16 @@ spring:
     hibernate:
       ddl-auto: update
 
+  jackson:
+    serialization:
+      indent_output: true
+
 app:
   cors:
     origins: "*"
     # in prod we allow all origins, but restrict in SecurityConfig based on env
+  backend:
+    url: ${BE_URL_PROD}
 
 gcs:
   bucket-name: "todo-app-profile-images"

@@ -2,12 +2,14 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { Avatar, Button, Box } from "@mui/joy";
 import { deleteImage, uploadImage } from "../shared/lib/user";
 import { getToken, setAuth } from "../shared/lib/token";
+import { useToast } from "../auth/hooks/useToast";
 
 export function AvatarWithMenu({ userImg }: { userImg?: string }) {
   const [open, setOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(userImg);
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const { showToast } = useToast();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -32,10 +34,11 @@ export function AvatarWithMenu({ userImg }: { userImg?: string }) {
 
     if (response.status === "error") {
       // handle error
-      alert(response.message);
+      showToast(response.message);
       setPreviewUrl(userImg); // revert to previous image
     }
 
+    showToast("Profile image added");
     const updatedUser = response.data;
     setPreviewUrl(updatedUser.profileImageUrl);
 
@@ -54,10 +57,11 @@ export function AvatarWithMenu({ userImg }: { userImg?: string }) {
 
     if (response.status === "error") {
       // handle error
-      alert(response.message);
+      showToast(response.message);
       return;
     }
 
+    showToast("Profile image deleted");
     const updatedUser = response.data;
     setPreviewUrl(updatedUser.profileImageUrl);
 

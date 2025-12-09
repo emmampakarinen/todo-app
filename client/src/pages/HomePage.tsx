@@ -22,7 +22,6 @@ export function HomePage() {
       try {
         const data = await getListsApi();
         setLists(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching lists:", error);
       } finally {

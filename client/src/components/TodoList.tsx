@@ -113,54 +113,56 @@ function TodoList({
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center w-full">
-      <div className="w-full max-w-4xl mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <FormControl size="sm" className="min-w-[200px]">
-            <FormLabel>Sort todos by</FormLabel>
+      {lists.length !== 0 ? (
+        <div className="w-full max-w-4xl mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <FormControl size="sm" className="min-w-[200px]">
+              <FormLabel>Sort todos by</FormLabel>
+              <Select
+                value={sortBy}
+                onChange={(_, value) => {
+                  if (!value) return;
+                  setSortBy(value as TodoSort);
+                }}
+              >
+                <Option value="position">Position</Option>
+                <Option value="due-asc">Due date (earliest first)</Option>
+                <Option value="due-desc">Due date (latest first)</Option>
+                <Option value="created-newest">Created (newest first)</Option>
+                <Option value="created-oldest">Created (oldest first)</Option>
+              </Select>
+            </FormControl>
+
+            <FormControl size="sm" orientation="horizontal">
+              <div className="flex items-center gap-2 sm:mt-5">
+                <Checkbox
+                  checked={showCompleted}
+                  onChange={(e) => setShowCompleted(e.target.checked)}
+                  label="Show completed todos"
+                />
+              </div>
+            </FormControl>
+          </div>
+
+          <FormControl size="sm" className="w-full sm:w-48">
+            <FormLabel>List</FormLabel>
             <Select
-              value={sortBy}
+              value={selectedListId === "all" ? "all" : String(selectedListId)}
               onChange={(_, value) => {
                 if (!value) return;
-                setSortBy(value as TodoSort);
+                setSelectedListId(value === "all" ? "all" : Number(value));
               }}
             >
-              <Option value="position">Position</Option>
-              <Option value="due-asc">Due date (earliest first)</Option>
-              <Option value="due-desc">Due date (latest first)</Option>
-              <Option value="created-newest">Created (newest first)</Option>
-              <Option value="created-oldest">Created (oldest first)</Option>
+              <Option value="all">All lists</Option>
+              {data.map((list) => (
+                <Option key={list.id} value={String(list.id)}>
+                  {list.name}
+                </Option>
+              ))}
             </Select>
           </FormControl>
-
-          <FormControl size="sm" orientation="horizontal">
-            <div className="flex items-center gap-2 sm:mt-5">
-              <Checkbox
-                checked={showCompleted}
-                onChange={(e) => setShowCompleted(e.target.checked)}
-                label="Show completed todos"
-              />
-            </div>
-          </FormControl>
         </div>
-
-        <FormControl size="sm" className="w-full sm:w-48">
-          <FormLabel>List</FormLabel>
-          <Select
-            value={selectedListId === "all" ? "all" : String(selectedListId)}
-            onChange={(_, value) => {
-              if (!value) return;
-              setSelectedListId(value === "all" ? "all" : Number(value));
-            }}
-          >
-            <Option value="all">All lists</Option>
-            {data.map((list) => (
-              <Option key={list.id} value={String(list.id)}>
-                {list.name}
-              </Option>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+      ) : null}
 
       {visibleLists.map((list) => (
         <div

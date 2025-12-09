@@ -4,11 +4,14 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import "../index.css";
 import Providers from "./providers";
+import { ToastProvider } from "../auth/context/ToastProvider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Providers>
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </Providers>
   </StrictMode>
 );

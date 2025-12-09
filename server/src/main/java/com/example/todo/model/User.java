@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -26,6 +27,13 @@ public class User {
 
     @Column(nullable=false, unique=true)
     private String email; 
+
+    @Column(nullable=false)
+    private boolean emailVerified;
+
+    private String verificationToken;
+    
+    private Instant verificationTokenExpiresAt;
 
     @Column(nullable=false, unique=true)
     private String username; 

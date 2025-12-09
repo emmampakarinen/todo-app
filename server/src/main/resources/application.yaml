@@ -16,10 +16,17 @@ spring:
   profiles:
     active: dev
 
+  jackson:
+    serialization:
+      indent_output: true
+
 # Dev CORS, allow Vite on 5173
 app:
   cors:
     origins: "http://localhost:5173"
+
+  backend:
+    url: "http://localhost:8080"
 
 gcs:
   bucket-name: "todo-app-profile-images-dev"

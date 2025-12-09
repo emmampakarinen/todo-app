@@ -1,5 +1,10 @@
 package com.example.todo.service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +22,15 @@ public class UserService {
     private final UserRepository users; // database 
     private final PasswordEncoder passwordEncoder; // hashing passwords
     private final JwtService jwtService;  // generating JWT tokens
+    private final EmailService emailService;
+    private final String backendUrl;
 
-    public UserService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService) {
-        this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService;
+    @Value("${app.frontend.url:http://localhost:5137}")
+    private String frontendUrl;
+
+    public UserService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService, EmailService emailService, @Value("${app.backend.url}") String backendUrl) {
+        this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService; this.emailService = emailService; this.backendUrl = backendUrl;
     }
-
     
     public User getUser(Long userId) {
         return users.findById(userId)
@@ -29,7 +38,24 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO register(RegisterRequest request) {
+    public void verifyEmail(String token) {
+        var user = users.findByVerificationToken(token)
+            .orElseThrow(() ->
+                new IllegalArgumentException("Invalid or already used token"));
+
+        if (user.getVerificationTokenExpiresAt() != null &&
+            user.getVerificationTokenExpiresAt().isBefore(Instant.now())) {
+            throw new IllegalStateException("Verification link has expired");
+        }
+
+        user.setEmailVerified(true);
+        user.setVerificationToken(null);
+        user.setVerificationTokenExpiresAt(null);
+        users.save(user);
+    }
+
+    @Transactional
+    public User register(RegisterRequest request) {
         if (users.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
@@ -37,20 +63,38 @@ public class UserService {
             throw new IllegalArgumentException("Username already in use");
         }
 
+        // creating new user
         User user = User.builder()
             .email(request.getEmail())
             .username(request.getUsername())
             .passwordHash(passwordEncoder.encode(request.getPassword()))
             .build();
+        user.setEmailVerified(false);
+
+        // token for verifying the user e-mail
+        String token = UUID.randomUUID().toString();
+        user.setVerificationToken(token);
+        user.setVerificationTokenExpiresAt(
+                Instant.now().plus(1, ChronoUnit.DAYS)
+        );
 
         var savedUser = users.save(user);
-        return new UserDTO(
-            savedUser.getId(),
-            savedUser.getEmail(),
-            savedUser.getUsername(),
-            savedUser.getProfileImageUrl(),
-            savedUser.getCreatedAt()
-        );
+
+        String verifyUrl = backendUrl + "/api/auth/verify-email?token=" + token;
+
+        String body = """
+                Hi!
+
+                Thanks for registering. Please confirm your email by clicking the link below:
+
+                %s
+
+                If you didn't create an account, you can ignore this email.
+                """.formatted(verifyUrl);
+
+        emailService.sendEmail(request.getEmail(), "Confirm your email", body);
+
+        return savedUser;
     }
 
     @Transactional
@@ -63,10 +107,14 @@ public class UserService {
             throw new IllegalArgumentException("Invalid username or password");
         }
 
+        if (!user.isEmailVerified()) {
+            throw new IllegalArgumentException("E-mail not verified");
+        }
+
         // Generate JWT token
         var token = jwtService.generate(user.getUsername(), user.getId());
 
-        var userRes = new UserDTO(user.getId(), user.getEmail(), user.getUsername(), user.getProfileImageUrl(), user.getCreatedAt());
+        var userRes = new UserDTO(user.getId(), user.getEmail(), user.isEmailVerified(), user.getUsername(), user.getProfileImageUrl(), user.getCreatedAt());
         return new AuthResponse(token, userRes);
     }
 

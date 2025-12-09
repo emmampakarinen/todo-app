@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerApi } from "../../shared/lib/auth";
 import { AppTitle } from "../../components/AppTitle";
+import { useToast } from "../hooks/useToast";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ export function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const passwordsMatch = password === confirmPassword;
 
@@ -17,23 +19,31 @@ export function RegisterPage() {
     e.preventDefault();
 
     if (!email || !username || !password || !confirmPassword) {
-      alert("Please fill in all fields");
+      showToast("Please fill in all fields");
       return;
     }
 
     try {
       const user = await registerApi({ email, username, password });
       console.log("Registered user:", user);
-      alert("Registration successful! You can now log in.");
+      showToast("Registration successful! You can now log in.");
       setEmail("");
       setUsername("");
       setPassword("");
       setConfirmPassword("");
 
+      showToast(
+        "Registration successful! Please verify your email before logging in."
+      );
       navigate("/login"); // Redirect to login page after registrarion
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
-      alert("Registration failed. Please try again.");
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Registration failed. Please try again.";
+
+      showToast(message, "danger");
     }
   };
 
