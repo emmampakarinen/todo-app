@@ -23,14 +23,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder; // hashing passwords
     private final JwtService jwtService;  // generating JWT tokens
     private final EmailService emailService;
+    private final String backendUrl;
 
-    @Value("${app.frontend.url:http://localhost:3000}")
+    @Value("${app.frontend.url:http://localhost:5137}")
     private String frontendUrl;
 
-    public UserService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService, EmailService emailService) {
-        this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService; this.emailService = emailService;
+    public UserService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService, EmailService emailService, @Value("${app.backend.url}") String backendUrl) {
+        this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService; this.emailService = emailService; this.backendUrl = backendUrl;
     }
-
     
     public User getUser(Long userId) {
         return users.findById(userId)
@@ -38,7 +38,24 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO register(RegisterRequest request) {
+    public void verifyEmail(String token) {
+        var user = users.findByVerificationToken(token)
+            .orElseThrow(() ->
+                new IllegalArgumentException("Invalid or already used token"));
+
+        if (user.getVerificationTokenExpiresAt() != null &&
+            user.getVerificationTokenExpiresAt().isBefore(Instant.now())) {
+            throw new IllegalStateException("Verification link has expired");
+        }
+
+        user.setEmailVerified(true);
+        user.setVerificationToken(null);
+        user.setVerificationTokenExpiresAt(null);
+        users.save(user);
+    }
+
+    @Transactional
+    public User register(RegisterRequest request) {
         if (users.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
@@ -63,7 +80,7 @@ public class UserService {
 
         var savedUser = users.save(user);
 
-        String verifyUrl = frontendUrl + "/verify-email?token=" + token;
+        String verifyUrl = backendUrl + "/api/auth/verify-email?token=" + token;
 
         String body = """
                 Hi!
@@ -77,14 +94,7 @@ public class UserService {
 
         emailService.sendEmail(request.getEmail(), "Confirm your email", body);
 
-        
-        return new UserDTO(
-            savedUser.getId(),
-            savedUser.getEmail(),
-            savedUser.getUsername(),
-            savedUser.getProfileImageUrl(),
-            savedUser.getCreatedAt()
-        );
+        return savedUser;
     }
 
     @Transactional

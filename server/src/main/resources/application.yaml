@@ -5,18 +5,6 @@ spring:
     username: ${PG_USER:todo_user}
     password: ${PG_PASSWORD:todo_pass}
 
-  mail:
-    host: smtp.yourprovider.com
-    port: 587
-    username: your-user
-    password: your-pass
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -32,6 +20,9 @@ spring:
 app:
   cors:
     origins: "http://localhost:5173"
+
+  backend:
+    url: "http://localhost:8080"
 
 gcs:
   bucket-name: "todo-app-profile-images-dev"

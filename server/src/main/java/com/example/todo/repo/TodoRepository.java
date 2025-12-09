@@ -14,7 +14,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     // find all todos for a user that are due between two dates, ordered by due date ascending
     List<Todo> findByTodoList_IdAndDueAtBetweenOrderByDueAtAsc(
-        Long UserId, LocalDateTime startInclusive, LocalDateTime endExclusive
+        Long listId, LocalDateTime startInclusive, LocalDateTime endExclusive
     );
 
     // count how many todos are in a specific list
@@ -24,8 +24,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     select t from Todo t
     where t.done = false
       and t.reminderSent = false
-      and t.dueDate = :dueDate
+      and t.dueAt = :dueAt
       and t.user.emailVerified = true
     """)
-    List<Todo> findRemindableTodos(@Param("dueDate") LocalDate dueDate);
+    List<Todo> findRemindableTodos(@Param("dueAt") LocalDate dueAt);
 }
