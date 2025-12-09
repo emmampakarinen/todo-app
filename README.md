@@ -145,7 +145,6 @@ The main endpoint groups are:
 
 ## Future Improvements
 
-- Reordering tasks
 - Analytics & progress charts
 - Shared lists between users
 - Email-based password reset
