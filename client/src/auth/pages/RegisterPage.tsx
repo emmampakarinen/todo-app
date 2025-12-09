@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerApi } from "../../shared/lib/auth";
 import { AppTitle } from "../../components/AppTitle";
 import { useToast } from "../hooks/useToast";
+import type { ErrorResponse } from "../../types/error";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -36,9 +37,14 @@ export function RegisterPage() {
         "Registration successful! Please verify your email before logging in."
       );
       navigate("/login"); // Redirect to login page after registrarion
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
-      showToast("Registration failed. Please try again.");
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Registration failed. Please try again.";
+
+      showToast(message, "danger");
     }
   };
 

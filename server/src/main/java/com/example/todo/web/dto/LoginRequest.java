@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LoginRequest {
-    @NotBlank @Size(min = 3, max = 32)
+    @NotBlank
     private String username; 
 
-    @NotBlank @Size(min = 8, max = 128)
+    @NotBlank 
     private String password; 
 }

@@ -21,17 +21,20 @@ export function LoginPage() {
 
     try {
       await login({ username, password });
-      console.log("Logging in with:", { username, password });
 
       setUsername("");
       setPassword("");
 
       navigate("/home", { replace: true }); // Redirect to home page after login
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error:", error);
-      const message = "Login failed. Please try again.";
 
-      showToast(message);
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Login failed. Please try again.";
+
+      showToast(message, "danger");
     }
   };
 

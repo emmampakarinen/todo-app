@@ -107,6 +107,10 @@ public class UserService {
             throw new IllegalArgumentException("Invalid username or password");
         }
 
+        if (!user.isEmailVerified()) {
+            throw new IllegalArgumentException("E-mail not verified");
+        }
+
         // Generate JWT token
         var token = jwtService.generate(user.getUsername(), user.getId());
 

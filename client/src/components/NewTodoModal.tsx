@@ -37,7 +37,6 @@ function NewTodoModal({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const dueDate = dueAt ? dueAt.format("YYYY-MM-DD") : null;
-    console.log(todoListId);
     try {
       const newTodo = await createTodoApi({
         todoListId: todoListId,
@@ -126,7 +125,15 @@ function NewTodoModal({
               </LocalizationProvider>
             </FormControl>
 
-            <Button type="submit">Submit</Button>
+            <Button
+              sx={{
+                bgcolor: "#AD1747",
+                "&:hover": { bgcolor: "#850E35" },
+              }}
+              type="submit"
+            >
+              Submit
+            </Button>
           </Stack>
         </form>
       </ModalDialog>

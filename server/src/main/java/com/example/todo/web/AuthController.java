@@ -40,10 +40,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         // check credentials and generate JWT token
-        AuthResponse res = userService.login(request);
-        return ResponseEntity.ok(res);
+        AuthResponse authRes = userService.login(request);
+        return ResponseEntity.ok(new ApiResponse<>("Login successful", authRes, "success"));
     }
 
     @GetMapping("/verify-email")
