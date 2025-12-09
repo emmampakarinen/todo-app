@@ -1,5 +1,10 @@
 package com.example.todo.service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +22,13 @@ public class UserService {
     private final UserRepository users; // database 
     private final PasswordEncoder passwordEncoder; // hashing passwords
     private final JwtService jwtService;  // generating JWT tokens
+    private final EmailService emailService;
 
-    public UserService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService) {
-        this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService;
+    @Value("${app.frontend.url:http://localhost:3000}")
+    private String frontendUrl;
+
+    public UserService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService, EmailService emailService) {
+        this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService; this.emailService = emailService;
     }
 
     
@@ -66,7 +75,7 @@ public class UserService {
                 If you didn't create an account, you can ignore this email.
                 """.formatted(verifyUrl);
 
-        emailService.sendEmail(email, "Confirm your email", body);
+        emailService.sendEmail(request.getEmail(), "Confirm your email", body);
 
         
         return new UserDTO(

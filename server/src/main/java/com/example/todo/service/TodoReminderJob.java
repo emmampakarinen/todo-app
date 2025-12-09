@@ -1,3 +1,14 @@
+package com.example.todo.service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import com.example.todo.model.Todo;
+import com.example.todo.repo.TodoRepository;
+
 @Service
 public class TodoReminderJob {
 
@@ -25,7 +36,7 @@ public class TodoReminderJob {
                     Your todo "%s" is due on %s.
                     Remember to finish it or mark it as completed in the app.
 
-                    """.formatted(todo.getTitle(), todo.getDueDate());
+                    """.formatted(todo.getTitle(), todo.getDueAt());
 
             emailService.sendEmail(email, subject, body);
 

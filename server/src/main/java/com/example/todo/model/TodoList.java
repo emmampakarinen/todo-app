@@ -1,6 +1,5 @@
 package com.example.todo.model;
 
-import java.time.LocalDate;
 import java.util.*;
 import jakarta.persistence.*;
 import lombok.Getter;
