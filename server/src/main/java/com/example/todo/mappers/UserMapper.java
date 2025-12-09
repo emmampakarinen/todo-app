@@ -8,6 +8,7 @@ public class UserMapper {
         return new UserDTO(
             user.getId(),
             user.getEmail(),
+            user.isEmailVerified(),
             user.getUsername(),
             user.getProfileImageUrl(),
             user.getCreatedAt()

@@ -9,6 +9,7 @@ import { changePassword, deleteUser, updateUser } from "../shared/lib/user";
 import { getToken, setAuth } from "../shared/lib/token";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/hooks/useAuth";
+import { useToast } from "../auth/hooks/useToast";
 
 export function ProfilePage() {
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
@@ -16,6 +17,7 @@ export function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -32,6 +34,12 @@ export function ProfilePage() {
       setAuth(token, updatedUser);
     }
 
+    let message = "User data updated";
+    if (!updateUser) {
+      message = "Could not update user data!";
+    }
+    showToast(message);
+
     setUser(updatedUser);
   }
 
@@ -41,12 +49,23 @@ export function ProfilePage() {
   ) {
     console.log("Changing password...");
     const response = await changePassword(oldPassword, newPassword);
-    console.log("Password change response:", response);
+
+    let message = "Password changed";
+    if (response.status === "error") {
+      message = "Could not change password!";
+    }
+    showToast(message);
   }
 
   async function handleDeleteUser() {
     console.log("Deleting user...");
     const response = await deleteUser();
+
+    let message = "User deleted";
+    if (response.status === "error") {
+      message = "Could not delete user!";
+    }
+    showToast(message);
 
     console.log("Deleted user response:", response);
     logout();

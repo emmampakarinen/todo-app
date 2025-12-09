@@ -3,12 +3,14 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { AppTitle } from "../../components/AppTitle";
+import { useToast } from "../hooks/useToast";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { showToast } = useToast();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,9 @@ export function LoginPage() {
       navigate("/home", { replace: true }); // Redirect to home page after login
     } catch (error) {
       console.error("Login error:", error);
+      const message = "Login failed. Please try again.";
+
+      showToast(message);
     }
   };
 

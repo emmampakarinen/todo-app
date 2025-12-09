@@ -110,7 +110,7 @@ public class UserService {
         // Generate JWT token
         var token = jwtService.generate(user.getUsername(), user.getId());
 
-        var userRes = new UserDTO(user.getId(), user.getEmail(), user.getUsername(), user.getProfileImageUrl(), user.getCreatedAt());
+        var userRes = new UserDTO(user.getId(), user.getEmail(), user.isEmailVerified(), user.getUsername(), user.getProfileImageUrl(), user.getCreatedAt());
         return new AuthResponse(token, userRes);
     }
 
