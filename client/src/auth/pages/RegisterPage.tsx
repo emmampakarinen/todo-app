@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerApi } from "../../shared/lib/auth";
 import { AppTitle } from "../../components/AppTitle";
 import { useToast } from "../hooks/useToast";
-import type { ErrorResponse } from "../../types/error";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");

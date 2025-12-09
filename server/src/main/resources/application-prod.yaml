@@ -8,6 +8,10 @@ spring:
     hibernate:
       ddl-auto: update
 
+  jackson:
+    serialization:
+      indent_output: true
+
 app:
   cors:
     origins: "*"
