@@ -68,6 +68,23 @@ Built with **React + TypeScript + Vite**, **Java Spring Boot**, and **PostgreSQL
 
 ## Running Locally (Development)
 
+### Prerequisites
+
+To run the application locally using Docker (recommended), the following tools are required:
+
+### Required
+- **Docker** (version 20+)
+- **Docker Compose**
+- **Git**
+
+These are sufficient to run the full local development stack (frontend, backend, PostgreSQL, and pgAdmin) without installing any additional runtimes.
+
+### Optional (only needed if running components manually)
+- **Node.js 20+** — required only if running the React frontend without Docker  
+- **Java 17+** — required only if running the Spring Boot backend without Docker  
+- **PostgreSQL 16** — optional, only required if not using Docker  
+- **pgAdmin** — optional database administration tool
+
 ### 1. Clone the repository
 
 ```bash
@@ -133,7 +150,7 @@ pgAdmin → http://localhost:5050
 If you face following errors: ```bash todo-postgres | 2025-12-10 18:47:53.781 EET [121] FATAL: role "todo_user" does not exist```
 run ```bashdocker compose -f docker-compose.dev.yaml down -v``` and rerun the docker compose command
 
-Note, that the mail service and imgage uploading does not work, unless you provide your own credentials to the env. file. 
+Note, that the mail service and image uploading does not work, unless you provide your own credentials to the env. file. 
 
 ---
 
