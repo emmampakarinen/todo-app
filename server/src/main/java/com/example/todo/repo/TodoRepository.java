@@ -21,11 +21,11 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     long countByTodoList_Id(Long listId);
 
     @Query("""
-    select t from Todo t
-    where t.done = false
-      and t.reminderSent = false
-      and t.dueAt = :dueAt
-      and t.user.emailVerified = true
-    """)
+        select t from Todo t
+        where t.done = false
+          and t.reminderSent = false
+          and t.dueAt = :dueAt
+          and t.todoList.user.emailVerified = true
+        """)
     List<Todo> findRemindableTodos(@Param("dueAt") LocalDate dueAt);
 }

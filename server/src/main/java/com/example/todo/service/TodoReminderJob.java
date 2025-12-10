@@ -21,14 +21,15 @@ public class TodoReminderJob {
     }
 
     // run cronjob every day at 08:00am
-    @Scheduled(cron = "0 0 8 * * *")
+   @Scheduled(cron = "0 0 8 * * *") 
     public void sendDueTomorrowReminders() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
 
         List<Todo> todos = todoRepository.findRemindableTodos(tomorrow);
-
+        System.out.println(todos);
+        System.out.println(tomorrow);
         for (Todo todo : todos) {
-            String email = todo.getUser().getEmail();
+            String email = todo.getTodoList().getUser().getEmail();
             String subject = "Reminder: \"" + todo.getTitle() + "\" is due tomorrow";
             String body = """
                     Hi!

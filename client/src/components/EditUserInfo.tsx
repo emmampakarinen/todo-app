@@ -29,6 +29,7 @@ export function EditUserInfo({ user, onUpdate }: editUserInfoProps) {
       <FormControl>
         <FormLabel>E-mail</FormLabel>
         <Input
+          disabled
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
