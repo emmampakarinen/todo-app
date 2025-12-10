@@ -13,25 +13,43 @@ Built with **React + TypeScript + Vite**, **Java Spring Boot**, and **PostgreSQL
 
 ### Frontend (React + TypeScript + Vite)
 
-- Register & login
-- Create weekly to-do lists
+- Register & login  
+- **Email verification flow** (user must verify email before the first log in)  
+- Create and delete to-do lists  
 - Add, edit, toggle, and delete tasks
-- Responsive UI (Tailwind + MUI Joy)
-- React Router for navigation
+- Filter todo-list view and tasks
+- **Reminder notifications** sent to e-mail when due tasks are approaching  
+- Responsive UI (Tailwind + MUI Joy)  
+- React Router for navigation  
 
 ### Backend (Java Spring Boot)
 
-- JWT-based authentication
-- CRUD endpoints for users, lists, and todos
-- PostgreSQL integration
-- CORS configured for Netlify
+- JWT-based authentication  
+- **Email verification system**:  
+  - Generates verification token on registration  
+  - Handles token expiry and validation  
+  - Activates user after successful verification  
+- **Automatic reminder system**:  
+  - Scheduled job checks todos with upcoming or overdue deadlines  
+  - Sends reminder emails only for tasks not completed and not previously reminded  
+  - Updates `reminderSent` flag after sending  
+- CRUD endpoints for users, lists, and todos  
+- PostgreSQL integration  
+- CORS configured for Netlify  
 - Deployed on Google Cloud Run
 
 ### Database (PostgreSQL)
 
-- Hosted on Neon
-- Serverless + connection pooling
-- Automatically created schema
+
+- Hosted on Neon  
+- Serverless + connection pooling  
+- Automatically created schema  
+- **Email verification fields**:  
+  - `verificationToken`  
+  - `verificationTokenExpiresAt`  
+- **Reminder system fields**:  
+  - `dueAt`  
+  - `reminderSent`  
 
 ---
 
