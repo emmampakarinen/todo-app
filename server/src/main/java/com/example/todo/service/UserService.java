@@ -25,9 +25,6 @@ public class UserService {
     private final EmailService emailService;
     private final String backendUrl;
 
-    @Value("${app.frontend.url:http://localhost:5137}")
-    private String frontendUrl;
-
     public UserService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService, EmailService emailService, @Value("${app.backend.url}") String backendUrl) {
         this.users = users; this.passwordEncoder = passwordEncoder; this.jwtService = jwtService; this.emailService = emailService; this.backendUrl = backendUrl;
     }

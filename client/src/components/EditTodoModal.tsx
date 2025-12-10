@@ -96,7 +96,6 @@ function EditTodoModal({
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 autoFocus
-                required
               />
             </FormControl>
 
@@ -111,7 +110,15 @@ function EditTodoModal({
               </LocalizationProvider>
             </FormControl>
 
-            <Button type="submit">Submit</Button>
+            <Button
+              sx={{
+                bgcolor: "#AD1747",
+                "&:hover": { bgcolor: "#850E35" },
+              }}
+              type="submit"
+            >
+              Submit
+            </Button>
           </Stack>
         </form>
       </ModalDialog>

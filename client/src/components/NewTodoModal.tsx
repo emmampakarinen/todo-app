@@ -110,7 +110,6 @@ function NewTodoModal({
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 autoFocus
-                required
               />
             </FormControl>
 

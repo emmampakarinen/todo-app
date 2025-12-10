@@ -18,6 +18,7 @@ public class EmailService {
     }
 
     public void sendEmail(String to, String subject, String text) {
+        System.out.println("remindin or sending an email");
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom(from);
         msg.setTo(to);

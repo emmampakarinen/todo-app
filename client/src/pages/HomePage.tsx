@@ -58,41 +58,35 @@ export function HomePage() {
 
   return (
     <>
-      <div className="flex flex-col gap-5 p-5">
+      <div className="flex flex-col gap-5 p-5 items-center">
         <div className="flex flex-col gap-2 justify-center items-center">
           <h2 className="text-3xl">Week {dayjs().week()}</h2>
         </div>
 
-        <div className="flex-1 min-w-0">
+        <div className="w-full max-w-4xl flex flex-col gap-6">
           <WeekSummary
             lists={lists}
             loading={loading}
             onListDeleted={handleListDeleted}
           />
-        </div>
 
-        <div className="flex flex-row justify-evenly gap-4">
-          <Button
-            sx={{
-              bgcolor: "#AD1747",
-              "&:hover": { bgcolor: "#850E35" },
-            }}
-            onClick={() => setOpenListModal(true)}
-          >
-            New list
-          </Button>
-
-          {lists.length !== 0 && (
+          <div className="flex flex-row justify-evenly gap-4 w-full">
             <Button
-              sx={{
-                bgcolor: "#AD1747",
-                "&:hover": { bgcolor: "#850E35" },
-              }}
-              onClick={() => setOpenTodoModal(true)}
+              sx={{ bgcolor: "#AD1747", "&:hover": { bgcolor: "#850E35" } }}
+              onClick={() => setOpenListModal(true)}
             >
-              New task
+              New list
             </Button>
-          )}
+
+            {lists.length !== 0 && (
+              <Button
+                sx={{ bgcolor: "#AD1747", "&:hover": { bgcolor: "#850E35" } }}
+                onClick={() => setOpenTodoModal(true)}
+              >
+                New task
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
