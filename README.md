@@ -95,8 +95,10 @@ PGADMIN_DEFAULT_EMAIL=admin@local.com
 PGADMIN_DEFAULT_PASSWORD=supersecret
 PGADMIN_PORT=5050
 
-JWT_SECRET=your-jwt-secret-here-min-32-char
-GOOGLE_APPLICATION_CREDENTIALS=add-google-app-credentials
+JWT_SECRET=your-jwt-secret-here-min-32-char 
+GOOGLE_APPLICATION_CREDENTIALS=add-google-app-credentials # only for production
+
+BE_URL_PROD="url" # only for production 
 ```
 
 `infra/.env`  
