@@ -128,6 +128,13 @@ Frontend → http://localhost:5173
 Backend → http://localhost:8080  
 pgAdmin → http://localhost:5050
 
+
+### Troubleshooting
+If you face following errors: ```bash todo-postgres | 2025-12-10 18:47:53.781 EET [121] FATAL: role "todo_user" does not exist```
+run ```bashdocker compose -f docker-compose.dev.yaml down -v``` and rerun the docker compose command
+
+Note, that the mail service and imgage uploading does not work, unless you provide your own credentials to the env. file. 
+
 ---
 
 ## API Endpoints
