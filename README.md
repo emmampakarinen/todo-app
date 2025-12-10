@@ -121,9 +121,8 @@ MAIL_PASSWORD="password" # for production
 BE_URL_PROD="url" # only for production 
 ```
 
-`infra/.env`  
-Before running the local development stack, create a `.env` file.  
-Use the example template:
+Before running the local development stack, create an `.env` file.  
+You can use the example template:
 
 ```bash
 cp .env.example .env
