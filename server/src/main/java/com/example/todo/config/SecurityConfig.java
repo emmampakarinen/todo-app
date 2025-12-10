@@ -31,39 +31,40 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain security(HttpSecurity http) throws Exception {
-    boolean isDev = Arrays.asList(env.getActiveProfiles()).contains("dev");
+    //boolean isDev = Arrays.asList(env.getActiveProfiles()).contains("dev");
     http
       .csrf(csrf -> csrf.disable())
       .cors(Customizer.withDefaults())
-      .authorizeHttpRequests(auth -> {auth
+      .authorizeHttpRequests(auth -> auth
         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight
-        .requestMatchers("/", "/ping", "/api/auth/**").permitAll()
-        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll();
-
-        if (isDev) {
-          // allow all in dev for easier testing
-          auth.anyRequest().permitAll();
-        } else {
-          // secure all endpoints in prod
-          auth.anyRequest().authenticated();
-        }
-
-  })
-  .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class); // JWT filter
+        .requestMatchers("/api/health").permitAll()
+        .requestMatchers("/api/auth/**").permitAll() 
+        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
+        .anyRequest().permitAll())
+    .addFilterBefore(
+      jwtAuthFilter, 
+      org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class
+    ); // JWT filter
     return http.build();
   }
 
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
-    var c = new CorsConfiguration();
-    // allow both localhost and 127.0.0.1 on any dev port
-    c.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*", "https://checkitup.netlify.app"));
-    c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-    c.setAllowedHeaders(List.of("Content-Type","Authorization","X-Requested-With","Accept"));
-    c.setAllowCredentials(true); // only if you send cookies/Authorization
+      var c = new CorsConfiguration();
 
-    var source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", c);
-    return source;
+      c.setAllowedOriginPatterns(List.of(
+          "http://localhost:*",
+          "http://127.0.0.1:*",
+          "https://checkitup.netlify.app"
+      ));
+
+      c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+      c.setAllowCredentials(true);
+      c.setAllowedHeaders(List.of("*"));
+      c.setExposedHeaders(List.of("Authorization"));
+
+      var source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", c);
+      return source;
   }
 }
