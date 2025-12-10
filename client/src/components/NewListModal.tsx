@@ -27,7 +27,7 @@ function NewListModal({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!listName || !listDescription) {
+    if (!listName) {
       return;
     }
 
@@ -79,7 +79,6 @@ function NewListModal({
             <FormControl>
               <FormLabel>List description</FormLabel>
               <Input
-                required
                 value={listDescription}
                 onChange={(e) => setListDescription(e.target.value)}
               />
