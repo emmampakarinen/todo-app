@@ -115,6 +115,9 @@ PGADMIN_PORT=5050
 JWT_SECRET=your-jwt-secret-here-min-32-char 
 GOOGLE_APPLICATION_CREDENTIALS=add-google-app-credentials # only for production
 
+MAIL_USERNAME="<asd>@gmail.com" # for production
+MAIL_PASSWORD="password" # for production
+
 BE_URL_PROD="url" # only for production 
 ```
 
@@ -126,7 +129,7 @@ Use the example template:
 cp .env.example .env
 ```
 
-Fill in your own values. The `.env.example` file shows all required variables without exposing secrets. The `GOOGLE_APPLICATION_CREDENTIALS` can be left empty (profile images cannot be uploaded/added when its empty)
+Fill in your own values. The `.env.example` file shows all required variables without exposing secrets. The `GOOGLE_APPLICATION_CREDENTIALS` can be left empty (profile images cannot be uploaded/added when its empty, and mail-service (which registration/login depends on) won't work unless you provide credentials)
 
 ### 3. Start the local development stack
 
